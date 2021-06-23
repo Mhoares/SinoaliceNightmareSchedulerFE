@@ -1,0 +1,37 @@
+<mat-card class="container-list">
+  <mat-card-header>
+    <mat-card-title>
+      Timeline
+    </mat-card-title>
+    <mat-card-subtitle>
+      {{help}}
+    </mat-card-subtitle>
+    <mat-slide-toggle class="center" (change)="edit($event)"
+                       color="accent">
+      <mat-icon *ngIf="canEdit" color="accent" matTooltip="Can add, insert, change and remove Nightmares">
+        edit
+      </mat-icon>
+      <mat-icon *ngIf="!canEdit" color="warn" matTooltip="Only can add Nightmares">
+        edit_off
+      </mat-icon>
+    </mat-slide-toggle>
+    <button mat-button>
+      <mat-icon color="warn" matTooltip="Delete all Nightmares" (click)="delete()">
+        delete
+      </mat-icon>
+    </button>
+  </mat-card-header>
+  <mat-card-content #timeline>
+      <app-fragment *ngFor="let fr of timeLine.fragment; let i =index;"
+                    [fragment]="fr" (removed)="remove($event)"
+                    (updated)="update($event)"
+                    (inserted)="insert($event)"
+                    [isLast]="timeLine.fragment.length-1 == i"
+                    [canEdit]="canEdit">
+
+      </app-fragment>
+  </mat-card-content>
+
+
+</mat-card>
+
