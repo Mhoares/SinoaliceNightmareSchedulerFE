@@ -1,5 +1,24 @@
 <mat-toolbar color="primary">
   <h1>Nightmare Scheduler</h1>
+  <div class="end mat-subheading-2">
+    Edit Mode
+    <mat-slide-toggle (change)="edit($event)">
+      <mat-icon *ngIf="canEdit" color="accent" matTooltip="Edit mode on">
+        edit
+      </mat-icon>
+      <mat-icon *ngIf="!canEdit" color="accent" matTooltip="Edit mode off">
+        edit_off
+      </mat-icon>
+    </mat-slide-toggle>
+    <mat-icon matTooltip="Add nightmares to your timeline by double clicking on the icon of the nightmare you want on the panel.
+
+                          Use the filters and search fields to narrow down the list.
+
+                          To edit your timeline make sure Edit mode is active on the top bar." matTooltipClass="line">
+      help
+    </mat-icon>
+  </div>
+
 </mat-toolbar>
 <section class="mat-app-background">
   <router-outlet></router-outlet>

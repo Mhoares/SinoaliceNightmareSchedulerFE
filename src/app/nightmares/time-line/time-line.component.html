@@ -6,15 +6,6 @@
     <mat-card-subtitle>
       {{help}}
     </mat-card-subtitle>
-    <mat-slide-toggle class="center" (change)="edit($event)"
-                       color="accent">
-      <mat-icon *ngIf="canEdit" color="accent" matTooltip="Can add, insert, change and remove Nightmares">
-        edit
-      </mat-icon>
-      <mat-icon *ngIf="!canEdit" color="warn" matTooltip="Only can add Nightmares">
-        edit_off
-      </mat-icon>
-    </mat-slide-toggle>
     <button mat-button>
       <mat-icon color="warn" matTooltip="Delete all Nightmares" (click)="delete()">
         delete

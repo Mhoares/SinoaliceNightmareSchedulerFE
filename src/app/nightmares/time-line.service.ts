@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
 import {Timeline} from "../shared/timeline.model";
 import {copyNightmareFromStorage} from "../shared/nightmare.model";
+import {BehaviorSubject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
 })
 export class TimeLineService {
+  canEdit: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   get timeline(): Timeline {
     const storage = localStorage.getItem('timeline')
     let tmp :Timeline

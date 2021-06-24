@@ -26,6 +26,14 @@ export class TimeLineComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.service.canEdit.asObservable().subscribe( can =>
+    {
+      this.canEdit = can
+      if(this.canEdit)
+        this.help ="Edit mode , edit your timeline..."
+      else
+        this.help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel'
+    })
     this.selectedNm.asObservable().subscribe(nm =>{
       if(this.action =="add"){
         if(this.timeLine.add(nm)){
@@ -77,14 +85,6 @@ export class TimeLineComponent implements OnInit {
     this.help =`Select a Nightmare in the panel with double click for insert it`
     this._snackBar.open(this.help,'close', {duration: this.snackbarDuration})
     this.insertFr = fr
-  }
-  edit( e : MatSlideToggleChange){
-     this.canEdit = e.checked
-    if (this.canEdit)
-      this.help ='Edit mode, edit your timeline'
-    else
-      this.help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel'
-
   }
   delete(){
     this.timeLine.delete()
