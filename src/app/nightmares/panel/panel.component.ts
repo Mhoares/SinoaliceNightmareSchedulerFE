@@ -30,7 +30,7 @@ export class PanelComponent implements OnInit {
   }
 
   ngOnInit(): void {
-   this.onSubmit()
+   this.filter()
   }
   resetNms(){
     this.visibleNms = []
@@ -41,7 +41,7 @@ export class PanelComponent implements OnInit {
   selected(nm :Nightmare){
     this.selectedNm.next(copyNightmare(nm))
   }
-  onSubmit(){
+  filter(){
     const name = this.searchForm.get('name')
     const chkL = this.searchForm.get('chkL')
     const chkSR = this.searchForm.get('chkSR')
@@ -106,8 +106,6 @@ export class PanelComponent implements OnInit {
       }
       return isValid
     })
-
   }
-
 
 }

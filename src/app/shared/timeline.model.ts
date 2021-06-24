@@ -111,5 +111,4 @@ export class Timeline {
   delete(){
     this._fragment.splice(0,this._fragment.length)
   }
-
 }

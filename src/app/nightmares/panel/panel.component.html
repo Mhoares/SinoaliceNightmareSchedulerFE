@@ -1,21 +1,21 @@
 <mat-card class="panel">
   <mat-card-header>
     <mat-card-title>Nightmares</mat-card-title>
-    <form  class="form" [formGroup]="searchForm" (ngSubmit)="onSubmit()">
+    <form  class="form" [formGroup]="searchForm" (ngSubmit)="filter()">
       <mat-form-field >
         <mat-label>Name</mat-label>
-        <input matInput placeholder="Ex. Ugallu" formControlName="name">
+        <input (change)="filter()" matInput placeholder="Ex. Ugallu" formControlName="name">
       </mat-form-field>
 
-      <mat-checkbox class="checkbox" formControlName="chkL">L</mat-checkbox>
-      <mat-checkbox class="checkbox" formControlName="chkSR">SR</mat-checkbox>
-      <mat-checkbox class="checkbox" formControlName="chkS">S</mat-checkbox>
-      <mat-checkbox class="checkbox" formControlName="chkA">A</mat-checkbox>
-      <mat-checkbox class="checkbox" formControlName="chkWater">Water</mat-checkbox>
-      <mat-checkbox class="checkbox" formControlName="chkFire">Fire</mat-checkbox>
-      <mat-checkbox class="checkbox" formControlName="chkWind">Wind</mat-checkbox>
-      <mat-checkbox class="checkbox" formControlName="chkGlobal">Global</mat-checkbox>
-      <mat-checkbox class="checkbox" formControlName="chkJP">JP</mat-checkbox>
+      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkL">L</mat-checkbox>
+      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkSR">SR</mat-checkbox>
+      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkS">S</mat-checkbox>
+      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkA">A</mat-checkbox>
+      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkWater">Water</mat-checkbox>
+      <mat-checkbox class="checkbox" (change)="filter()"formControlName="chkFire">Fire</mat-checkbox>
+      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkWind">Wind</mat-checkbox>
+      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkGlobal">Global</mat-checkbox>
+      <mat-checkbox class="checkbox" (change)="filter()"formControlName="chkJP">JP</mat-checkbox>
       <button mat-stroked-button color="primary" type="submit">Filter</button>
 
     </form>
