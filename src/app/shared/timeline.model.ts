@@ -60,7 +60,7 @@ export class Timeline {
   update(nm: Nightmare, unm:Nightmare): boolean{
     const lenght = this._fragment.length
     const last = this._fragment.length -1
-    const  lastCast = this.totalTime() - this._fragment[last].nm.GvgSkillLead + nm.getTotalTime()
+    const  lastCast = this.totalTime() - this._fragment[last].nm.GvgSkillLead - nm.getTotalTime()  + unm.getTotalTime()
     let updated = 0
     let exist: Fragment|undefined
     let fr :Fragment | undefined
