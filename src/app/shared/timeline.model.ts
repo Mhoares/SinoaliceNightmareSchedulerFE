@@ -114,7 +114,7 @@ export class Timeline {
   adjustTimes(current :number , previous :number){
     const  p =  this._fragment[previous].nm
     this.remove(p)
-    if(current < this._fragment.length - 1)
+    if(current < this._fragment.length)
       this.insert(p,this._fragment[current],true)
     else
       this.add(p)

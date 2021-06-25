@@ -33,7 +33,7 @@ export class TimeLineComponent implements OnInit {
       if(this.canEdit)
         this.help ="Edit mode , edit your timeline..."
       else
-        this.help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel or you can drag and drop to reorder in the timeline'
+        this.help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel, also you can drag and drop to reorder in the timeline'
     })
     this.selectedNm.asObservable().subscribe(nm =>{
       if(this.action =="add"){
