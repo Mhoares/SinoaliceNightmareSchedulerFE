@@ -6,6 +6,7 @@ import {Fragment} from "../../shared/fragment.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {MatSlideToggleChange} from "@angular/material/slide-toggle";
 import {TimeLineService} from "../time-line.service";
+import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
 
 @Component({
   selector: 'app-time-line',
@@ -32,7 +33,7 @@ export class TimeLineComponent implements OnInit {
       if(this.canEdit)
         this.help ="Edit mode , edit your timeline..."
       else
-        this.help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel'
+        this.help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel or you can drag and drop to reorder in the timeline'
     })
     this.selectedNm.asObservable().subscribe(nm =>{
       if(this.action =="add"){
@@ -89,6 +90,12 @@ export class TimeLineComponent implements OnInit {
   delete(){
     this.timeLine.delete()
     this.service.timeline = this.timeLine
+  }
+  drop(event: CdkDragDrop<Fragment[]>) {
+    if (event.previousIndex != event.currentIndex) {
+      this.timeLine.adjustTimes(event.currentIndex, event.previousIndex)
+      this.service.timeline = this.timeLine
+    }
   }
 
 

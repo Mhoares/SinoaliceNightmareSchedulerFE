@@ -20,7 +20,7 @@ export class Fragment {
     this.antEnd?.unsubscribe()
     if (value){
       this._ant = value
-      this.antEnd = this._ant?.end.asObservable().subscribe(n => this.setTimes(n))
+      this.antEnd = this._ant?.end?.asObservable().subscribe(n => this.setTimes(n))
     }else{
       this._ant = value;
     }
@@ -32,14 +32,14 @@ export class Fragment {
   set nm(value: Nightmare) {
     this._nm = value;
     this._activation = this._begin  - this.nm.GvgSkillLead
-    this.end.next( this._activation - this.nm.GvgSkillDur)
+    this.end?.next( this._activation - this.nm.GvgSkillDur)
   }
-  get end(): BehaviorSubject<number> {
+  get end(): BehaviorSubject<number> | undefined {
     return this._end;
   }
   private _begin : number = 0
   private _activation:number = 0
-  private _end : BehaviorSubject<number> = new BehaviorSubject<number>(0)
+  private _end? : BehaviorSubject<number>
   private _ant?: Fragment
   private antEnd?:Subscription
   private _nm : Nightmare
@@ -47,7 +47,7 @@ export class Fragment {
     this._nm =nm
     if(ant){
       this.ant =ant
-      this.antEnd = this.ant.end.asObservable().subscribe(n=>{
+      this.antEnd = this.ant.end?.asObservable().subscribe(n=>{
         this.setTimes(n)
       })
     }
@@ -55,8 +55,13 @@ export class Fragment {
       this.setTimes(init)
   }
    private setTimes( init :number, ){
+
     this._begin =  init
     this._activation = this._begin  - this.nm.GvgSkillLead
-    this.end.next( this._activation - this.nm.GvgSkillDur)
+     if(!this._end)
+       this._end = new BehaviorSubject<number>(this._activation - this.nm.GvgSkillDur)
+     else
+       this.end?.next( this._activation - this.nm.GvgSkillDur)
   }
+
 }

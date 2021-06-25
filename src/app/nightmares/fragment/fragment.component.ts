@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Fragment} from "../../shared/fragment.model";
 import {Nightmare} from "../../shared/nightmare.model";
 

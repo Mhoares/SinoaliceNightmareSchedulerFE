@@ -12,13 +12,13 @@
       </mat-icon>
     </button>
   </mat-card-header>
-  <mat-card-content #timeline>
+  <mat-card-content  cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" #timeline>
       <app-fragment *ngFor="let fr of timeLine.fragment; let i =index;"
                     [fragment]="fr" (removed)="remove($event)"
                     (updated)="update($event)"
                     (inserted)="insert($event)"
                     [isLast]="timeLine.fragment.length-1 == i"
-                    [canEdit]="canEdit">
+                    [canEdit]="canEdit" cdkDrag >
 
       </app-fragment>
   </mat-card-content>

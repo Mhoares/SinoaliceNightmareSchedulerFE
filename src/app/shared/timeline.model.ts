@@ -38,13 +38,13 @@ export class Timeline {
     }
     return added
   }
-  insert(nm :Nightmare, fr :Fragment): boolean{
+  insert(nm :Nightmare, fr :Fragment, flex :boolean = false): boolean{
     const i = this._fragment.indexOf(fr)
     const  exist = this._fragment.find(f => f.nm.hasSkill(nm))
     const last = this._fragment.length -1
     const  lastCast = this.totalTime() - this._fragment[last].nm.GvgSkillLead + nm.getTotalTime()
     let tmp: Fragment
-    if(exist)
+    if(  !flex && exist)
       return false
     if(lastCast > this._max)
       return false
@@ -110,5 +110,14 @@ export class Timeline {
   }
   delete(){
     this._fragment.splice(0,this._fragment.length)
+  }
+  adjustTimes(current :number , previous :number){
+    const  p =  this._fragment[previous].nm
+    this.remove(p)
+    if(current < this._fragment.length - 1)
+      this.insert(p,this._fragment[current],true)
+    else
+      this.add(p)
+
   }
 }
