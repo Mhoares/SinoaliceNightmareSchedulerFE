@@ -18,7 +18,9 @@ import {MatSnackBarModule} from '@angular/material/snack-bar';
 import {MatRippleModule} from '@angular/material/core';
 import {MatSlideToggleModule} from '@angular/material/slide-toggle';
 import {DragDropModule} from '@angular/cdk/drag-drop';
-
+import {MatTableModule} from "@angular/material/table";
+import {MatSortModule} from '@angular/material/sort';
+import {MatPaginatorModule} from '@angular/material/paginator';
 @NgModule({
   declarations: [],
   imports: [
@@ -42,7 +44,10 @@ import {DragDropModule} from '@angular/cdk/drag-drop';
     MatSnackBarModule,
     MatRippleModule,
     MatSlideToggleModule,
-    DragDropModule
+    DragDropModule,
+    MatTableModule,
+    MatSortModule,
+    MatPaginatorModule
 
   ]
 })

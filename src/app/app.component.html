@@ -1,5 +1,18 @@
 <mat-toolbar color="primary">
-  <h1>Nightmare Scheduler</h1>
+  <button mat-button>
+    <h1  class="rp" [routerLink]="['']">Nightmare Scheduler</h1>
+  </button>
+
+  <div class="  mat-subheading-2" >
+    <button  [routerLink]="['ranks']" class="gc" mat-button>
+      GC ranks
+      <mat-icon>
+        military_tech
+      </mat-icon>
+    </button>
+
+  </div>
+
   <div class="end mat-subheading-2">
     Edit Mode
     <mat-slide-toggle (change)="edit($event)">

@@ -1,0 +1,51 @@
+<div class="mat-elevation-z8">
+  <form [formGroup]="searchForm" class="filter">
+    <mat-form-field  >
+      <input matInput  formControlName="name"  placeholder="Search Guild">
+    </mat-form-field>
+  </form>
+  <table mat-table [dataSource]="dataSource" matSort>
+    <ng-container matColumnDef="trueRank">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Rank </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.trueRank}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="name">
+      <mat-header-cell *matHeaderCellDef mat-sort-header>Guild </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="wins">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Wins </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.wins}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="losses">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Losses </mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.losses}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="lifeforce">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Lifeforce</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.lifeforce}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="timeslot">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> TS</mat-header-cell>
+      <mat-cell *matCellDef="let row">{{row.timeslot}}</mat-cell>
+    </ng-container>
+    <ng-container matColumnDef="updated">
+      <mat-header-cell *matHeaderCellDef mat-sort-header> Updated</mat-header-cell>
+      <mat-cell *matCellDef="let row">
+        <mat-icon [inline]="true" color="accent" *ngIf="row.updated">
+          done
+        </mat-icon>
+        <mat-icon [inline]="true" color="warn" *ngIf="!row.updated">
+          close
+        </mat-icon>
+
+      </mat-cell>
+    </ng-container>
+
+    <mat-header-row *matHeaderRowDef="displayedColumns">
+    </mat-header-row>
+    <mat-row *matRowDef="let row; columns: displayedColumns;">
+    </mat-row>
+  </table>
+  <mat-paginator class="pag" [pageSizeOptions]="[20, 60, 100]" showFirstLastButtons></mat-paginator>
+</div>

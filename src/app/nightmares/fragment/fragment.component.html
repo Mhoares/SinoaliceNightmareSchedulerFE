@@ -22,13 +22,13 @@
     <img matCardImageSmall matTooltipClass="line" [src]="fragment?.nm?.getImageURL()" [matTooltip]="fragment?.nm?.toString() || ''" >
   </mat-card-content>
   <mat-card-actions *ngIf="canEdit">
-    <button  mat-button color="accent"(click)="insert()"  matTooltip="Insert a Nightmare">
+    <button  mat-icon-button color="accent"(click)="insert()"  matTooltip="Insert a Nightmare">
       <mat-icon [inline]="true" >add</mat-icon>
     </button>
-    <button mat-button color="accent"(click)="update()" matTooltip="Change the Nightmare" >
+    <button mat-icon-button color="accent"(click)="update()" matTooltip="Change the Nightmare" >
       <mat-icon [inline]="true" >edit</mat-icon>
     </button>
-    <button  mat-button color="warn" (click)="delete()" >
+    <button  mat-icon-button color="warn" (click)="delete()" >
       <mat-icon [inline]="true" >delete</mat-icon>
     </button>
   </mat-card-actions>
