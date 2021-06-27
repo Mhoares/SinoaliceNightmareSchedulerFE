@@ -6,11 +6,19 @@
     <mat-card-subtitle>
       {{help}}
     </mat-card-subtitle>
-    <button mat-button>
-      <mat-icon color="warn" matTooltip="Delete all Nightmares" (click)="delete()">
-        delete
-      </mat-icon>
-    </button>
+    <div class="options">
+      <button mat-button>
+        <mat-icon color="accent" matTooltip="Save" (click)="save()">
+          save
+        </mat-icon>
+      </button>
+      <button mat-button>
+        <mat-icon color="warn" matTooltip="Delete all Nightmares" (click)="delete()">
+          delete
+        </mat-icon>
+      </button>
+    </div>
+
   </mat-card-header>
   <mat-card-content  cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" #timeline>
       <app-fragment *ngFor="let fr of timeLine.fragment; let i =index;"

@@ -1,6 +1,7 @@
 import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angular/core';
 import {Fragment} from "../../shared/fragment.model";
 import {Nightmare} from "../../shared/nightmare.model";
+import {NightmareService} from "../nightmare.service";
 
 @Component({
   selector: 'app-fragment',
@@ -14,11 +15,12 @@ export class FragmentComponent implements OnInit {
   @Output() removed :EventEmitter<Nightmare> = new EventEmitter<Nightmare>()
   @Output()  updated :EventEmitter<Nightmare> = new EventEmitter<Nightmare>()
   @Output()  inserted :EventEmitter<Fragment> = new EventEmitter<Fragment>()
+  img =''
 
-  constructor() { }
+  constructor(private service:NightmareService) { }
 
   ngOnInit(): void {
-
+    this.fragment?.nm.getImage(this.service).subscribe( img => this.img =img)
   }
   date(s:number):Date{
 

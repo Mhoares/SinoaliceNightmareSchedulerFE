@@ -1,3 +1,5 @@
+import {NightmareService} from "../nightmares/nightmare.service";
+import {Observable, Subscription} from "rxjs";
 
 export enum Rarity {
     A=3,
@@ -101,6 +103,9 @@ export class  Nightmare {
       tmp+='0'
     }
     return tmp+this.Icon+ext
+  }
+  public getImage(service: NightmareService): Observable<string>{
+        return service.getImage(this._Icon)
   }
   public toString():string{
     return `${this._NameEN}

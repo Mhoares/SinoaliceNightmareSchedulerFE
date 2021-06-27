@@ -4,9 +4,11 @@ import {Nightmare} from "../../shared/nightmare.model";
 import {Timeline} from "../../shared/timeline.model";
 import {Fragment} from "../../shared/fragment.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatSlideToggleChange} from "@angular/material/slide-toggle";
 import {TimeLineService} from "../time-line.service";
-import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import {CdkDragDrop} from "@angular/cdk/drag-drop";
+// @ts-ignore
+import html2canvas from "html2canvas";
+import {saveAs} from "file-saver";
 
 @Component({
   selector: 'app-time-line',
@@ -22,6 +24,7 @@ export class TimeLineComponent implements OnInit {
   help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel'
   canEdit = false
   snackbarDuration = 5000
+  @ViewChild('timeline') tl? : ElementRef;
   constructor(private _snackBar: MatSnackBar, private service: TimeLineService) {
     this.timeLine = service.timeline
   }
@@ -97,6 +100,13 @@ export class TimeLineComponent implements OnInit {
       this.service.timeline = this.timeLine
     }
   }
-
+  save(){
+    html2canvas(this.tl?.nativeElement).then(canvas =>{
+      canvas.toBlob( blob => {
+        if (blob)
+          saveAs(blob,'schedule'+new Date().getMilliseconds())
+      })
+    })
+  }
 
 }
