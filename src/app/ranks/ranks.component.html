@@ -1,7 +1,15 @@
 <div class="mat-elevation-z8">
   <form [formGroup]="searchForm" class="filter">
-    <mat-form-field  >
+    <mat-form-field >
       <input matInput  formControlName="name"  placeholder="Search Guild">
+    </mat-form-field>
+    <mat-form-field appearance="fill" class="select">
+      <mat-label>TS</mat-label>
+      <mat-select formControlName="timeslot">
+        <mat-option *ngFor="let ts  of timeslots" [value]="ts">
+          {{ts}}
+        </mat-option>
+      </mat-select>
     </mat-form-field>
   </form>
   <table mat-table [dataSource]="dataSource" matSort>
