@@ -1,5 +1,6 @@
 import {Fragment} from "./fragment.model";
 import {Nightmare} from "./nightmare.model";
+import {NightmareService} from "../nightmares/nightmare.service";
 
 
 export class Timeline {
@@ -73,6 +74,7 @@ export class Timeline {
       if(fr && !exist){
         updated = this._fragment.indexOf(fr)
         this._fragment[updated].nm = unm
+        this._fragment[updated].nm.Image = ''
         return true
       }
     }

@@ -9,6 +9,7 @@ import {CdkDragDrop} from "@angular/cdk/drag-drop";
 // @ts-ignore
 import html2canvas from "html2canvas";
 import {saveAs} from "file-saver";
+import {backgroundColor} from "html2canvas/dist/types/css/property-descriptors/background-color";
 
 @Component({
   selector: 'app-time-line',
@@ -20,6 +21,7 @@ export class TimeLineComponent implements OnInit {
   timeLine: Timeline
   updateNm?: Nightmare
   insertFr?: Fragment
+  updated : Subject<Map<number, boolean>> = new Subject<Map<number,boolean>>()
   action ="add"
   help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel'
   canEdit = false
@@ -51,11 +53,14 @@ export class TimeLineComponent implements OnInit {
       if(this.action =="edit" && this.updateNm){
         if (this.timeLine.update(this.updateNm, nm )){
           this._snackBar.open(`${this.updateNm.NameEN} has been changed for ${nm.NameEN}`,"close", {duration: this.snackbarDuration})
+          const map = new Map<number, boolean>()
+          map.set(nm.ID, true)
+          this.updated.next(map)
           this.service.timeline = this.timeLine
         }
-
-        else
+        else{
           this._snackBar.open(`${this.updateNm.NameEN} can't be changed for ${nm.NameEN}, press the button again to retry`,"close")
+        }
 
         this.help ="Select a Nightmare in the panel with double click to add it to the timeline"
         this.action = "add"
@@ -101,12 +106,14 @@ export class TimeLineComponent implements OnInit {
     }
   }
   save(){
-    html2canvas(this.tl?.nativeElement).then(canvas =>{
-      canvas.toBlob( blob => {
-        if (blob)
-          saveAs(blob,'schedule'+new Date().getMilliseconds())
+      html2canvas(this.tl?.nativeElement).then(canvas =>{
+        canvas.toBlob( blob => {
+          if (blob)
+            saveAs(blob,'schedule'+new Date().getTime())
+        })
       })
-    })
+    this._snackBar.open("Saving...",'close', {duration: this.snackbarDuration})
   }
+
 
 }

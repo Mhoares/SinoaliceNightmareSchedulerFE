@@ -2,6 +2,8 @@ import {Component, EventEmitter, Input, OnDestroy, OnInit, Output} from '@angula
 import {Fragment} from "../../shared/fragment.model";
 import {Nightmare} from "../../shared/nightmare.model";
 import {NightmareService} from "../nightmare.service";
+import {Subject} from "rxjs";
+import {TimeLineService} from "../time-line.service";
 
 @Component({
   selector: 'app-fragment',
@@ -12,15 +14,16 @@ export class FragmentComponent implements OnInit {
   @Input() fragment? :Fragment
   @Input() isLast : boolean = false
   @Input()  canEdit : boolean = false
+  @Input() statusUpdate? : Subject<Map<number, boolean>>
   @Output() removed :EventEmitter<Nightmare> = new EventEmitter<Nightmare>()
   @Output()  updated :EventEmitter<Nightmare> = new EventEmitter<Nightmare>()
   @Output()  inserted :EventEmitter<Fragment> = new EventEmitter<Fragment>()
   img =''
 
-  constructor(private service:NightmareService) { }
+  constructor(private service:NightmareService, private tlService:TimeLineService) { }
 
   ngOnInit(): void {
-    this.fragment?.nm.getImage(this.service).subscribe( img => this.img =img)
+    this.fragment?.nm.getImage(this.service).then( img => this.img = img)
   }
   date(s:number):Date{
 
@@ -31,6 +34,15 @@ export class FragmentComponent implements OnInit {
   }
   update(){
     this.updated.emit(this.fragment?.nm)
+    this.statusUpdate?.asObservable().subscribe( map => {
+      if (map.get(this.fragment?.nm.ID|| 0))
+        this.fragment?.nm.getImage(this.service).then(img =>{
+            this.img = img
+        }
+
+        )
+    })
+
   }
   insert(){
     this.inserted.emit(this.fragment)
