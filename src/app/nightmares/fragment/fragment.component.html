@@ -19,7 +19,7 @@
     </mat-list-item>
   </mat-list>
   <mat-card-content class="generic-background">
-    <img [ngClass]="{'icon' :saving}" matCardImageSmall *ngIf="img" matTooltipClass="line" [src]="this.img" [matTooltip]="fragment?.nm?.toString() || ''" >
+    <img [ngClass]="{'icon' :saving,  'first':first}" matCardImageSmall *ngIf="img" matTooltipClass="line" [src]="this.img" [matTooltip]="fragment?.nm?.toString() || ''" >
   </mat-card-content>
   <mat-card-actions *ngIf="canEdit" class="generic-background">
     <button  mat-icon-button color="accent"(click)="insert()"  matTooltip="Insert a Nightmare">

@@ -12,6 +12,7 @@ import {TimeLineService} from "../time-line.service";
 })
 export class FragmentComponent implements OnInit {
   @Input() fragment? :Fragment
+  @Input() first: boolean = false
   @Input() isLast : boolean = false
   @Input()  canEdit : boolean = false
   @Input()  saving : boolean = false
