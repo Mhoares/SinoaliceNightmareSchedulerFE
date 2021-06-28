@@ -15,7 +15,7 @@
 
   <div class="end mat-subheading-2">
     Edit Mode
-    <mat-slide-toggle (change)="edit($event)">
+    <mat-slide-toggle [disabled]="disabled" (change)="edit($event)" [checked]="canEdit">
       <mat-icon *ngIf="canEdit" color="accent" matTooltip="Edit mode on">
         edit
       </mat-icon>

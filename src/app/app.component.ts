@@ -10,10 +10,15 @@ import {MatSlideToggleChange} from "@angular/material/slide-toggle";
 export class AppComponent implements OnInit{
   title = 'SinoaliceNightmareSchedulerFE';
   canEdit = false
+  disabled = false
   constructor(private tmservice:TimeLineService) {
   }
   ngOnInit() {
     this.canEdit = this.tmservice.canEdit.value
+    this.tmservice.canEdit.asObservable().subscribe( v => {
+      this.canEdit = v
+    })
+    this.tmservice.disableEdit.asObservable().subscribe(v => this.disabled = v)
   }
   edit( e : MatSlideToggleChange){
     this.canEdit = e.checked

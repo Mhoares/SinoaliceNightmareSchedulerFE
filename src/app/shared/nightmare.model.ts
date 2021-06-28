@@ -1,3 +1,5 @@
+import {NightmareService} from "../nightmares/nightmare.service";
+import {Observable, Subscription} from "rxjs";
 
 export enum Rarity {
     A=3,
@@ -13,7 +15,12 @@ export enum Attribute {
 
 
 export class  Nightmare {
-
+  get Image(): string {
+    return this._Image;
+  }
+  set Image(Image:string){
+    this._Image = Image
+  }
   private readonly _ID : number
   private readonly _Icon: string
   private readonly _Attribute : Attribute
@@ -24,6 +31,7 @@ export class  Nightmare {
   private readonly _GvgSkillLead : number
   private readonly _GvgSkillSP : number
   private readonly _Global: boolean
+  private  _Image:string = ''
 
  constructor( ID : number,
               Icon: string,
@@ -34,7 +42,8 @@ export class  Nightmare {
               GvgSkillDur : number,
               GvgSkillLead : number,
               GvgSkillSP : number,
-              Global: boolean) {
+              Global: boolean,
+              Image?:string) {
    this._ID = ID;
    this._Icon = Icon;
    this._Attribute = Attribute;
@@ -44,7 +53,9 @@ export class  Nightmare {
    this._GvgSkillDur = GvgSkillDur;
    this._GvgSkillLead = GvgSkillLead;
    this._GvgSkillSP = GvgSkillSP;
-   this._Global= Global}
+   this._Global= Global
+   this._Image = Image || ''
+  }
 
   get Global():boolean{
     return this._Global
@@ -102,6 +113,12 @@ export class  Nightmare {
     }
     return tmp+this.Icon+ext
   }
+  public async getImage(service: NightmareService): Promise<string> {
+        if (this._Image)
+          return this._Image
+        this._Image = await service.getImage(this._Icon).toPromise()
+        return this._Image
+  }
   public toString():string{
     return `${this._NameEN}
             Skill: ${this._GvgSkillEN}
@@ -133,5 +150,6 @@ export function copyNightmareFromStorage(obj:any){
     obj._GvgSkillDur,
     obj._GvgSkillLead,
     obj._GvgSkillSP,
-  obj._Global)
+  obj._Global,
+    obj._Image)
 }

@@ -8,6 +8,7 @@ import {BehaviorSubject} from "rxjs";
 })
 export class TimeLineService {
   canEdit: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
+  disableEdit: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false)
   get timeline(): Timeline {
     const storage = localStorage.getItem('timeline')
     let tmp :Timeline

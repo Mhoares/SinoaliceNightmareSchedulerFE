@@ -4,9 +4,12 @@ import {Nightmare} from "../../shared/nightmare.model";
 import {Timeline} from "../../shared/timeline.model";
 import {Fragment} from "../../shared/fragment.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
-import {MatSlideToggleChange} from "@angular/material/slide-toggle";
 import {TimeLineService} from "../time-line.service";
-import {CdkDragDrop, moveItemInArray} from "@angular/cdk/drag-drop";
+import {CdkDragDrop} from "@angular/cdk/drag-drop";
+import html2canvas from "html2canvas"
+import {saveAs} from "file-saver";
+import {MatSlideToggleChange} from "@angular/material/slide-toggle";
+
 
 @Component({
   selector: 'app-time-line',
@@ -18,9 +21,11 @@ export class TimeLineComponent implements OnInit {
   timeLine: Timeline
   updateNm?: Nightmare
   insertFr?: Fragment
+  updated : Subject<Map<number, boolean>> = new Subject<Map<number,boolean>>()
   action ="add"
   help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel'
   canEdit = false
+  saving = false
   snackbarDuration = 5000
   constructor(private _snackBar: MatSnackBar, private service: TimeLineService) {
     this.timeLine = service.timeline
@@ -48,11 +53,14 @@ export class TimeLineComponent implements OnInit {
       if(this.action =="edit" && this.updateNm){
         if (this.timeLine.update(this.updateNm, nm )){
           this._snackBar.open(`${this.updateNm.NameEN} has been changed for ${nm.NameEN}`,"close", {duration: this.snackbarDuration})
+          const map = new Map<number, boolean>()
+          map.set(nm.ID, true)
+          this.updated.next(map)
           this.service.timeline = this.timeLine
         }
-
-        else
+        else{
           this._snackBar.open(`${this.updateNm.NameEN} can't be changed for ${nm.NameEN}, press the button again to retry`,"close")
+        }
 
         this.help ="Select a Nightmare in the panel with double click to add it to the timeline"
         this.action = "add"
@@ -96,6 +104,29 @@ export class TimeLineComponent implements OnInit {
       this.timeLine.adjustTimes(event.currentIndex, event.previousIndex)
       this.service.timeline = this.timeLine
     }
+  }
+  save(){
+      const nms = document.getElementById('schedule')
+      if (nms)
+      html2canvas(nms).then(canvas =>{
+
+        canvas.toBlob( blob => {
+          if (blob)
+            saveAs(blob,'schedule'+new Date().getTime())
+        },"image/png")
+      })
+    this._snackBar.open("Saving...",'close', {duration: this.snackbarDuration})
+  }
+  canSave(e: MatSlideToggleChange){
+    this.saving = e.checked
+    if(this.saving){
+      this.service.canEdit.next(false)
+      this.service.disableEdit.next(true)
+    }else{
+      this.service.disableEdit.next(false)
+    }
+
+
   }
 
 

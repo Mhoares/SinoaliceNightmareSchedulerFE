@@ -49,11 +49,9 @@ export class RanksComponent implements OnInit,AfterViewInit {
           if(value!='all' && key === 'timeslot')
             matchFilter.push(data.timeslot === Number(value))
         })
-
         return matchFilter.every(Boolean);
       };
       this.loaded.next(true)
-
     })
     this.searchForm.get('name')?.valueChanges
       .subscribe(v => this.filter('name',this.searchForm.get('name')?.value || ''))

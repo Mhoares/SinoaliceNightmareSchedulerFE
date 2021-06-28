@@ -1,4 +1,4 @@
-<mat-card class="container-list">
+<mat-card class="container-list generic-background" >
   <mat-card-header>
     <mat-card-title>
       Timeline
@@ -6,21 +6,41 @@
     <mat-card-subtitle>
       {{help}}
     </mat-card-subtitle>
-    <button mat-button>
-      <mat-icon color="warn" matTooltip="Delete all Nightmares" (click)="delete()">
-        delete
-      </mat-icon>
-    </button>
+    <div class="options">
+      <mat-slide-toggle (change)="canSave($event)">
+        Enable save
+      </mat-slide-toggle>
+      <button mat-button  matTooltip="Save as image" [disabled]="!saving"
+              (click)="save()" *ngIf="this.timeLine.fragment.length">
+        <mat-icon *ngIf="saving" color="accent">
+          save
+        </mat-icon>
+        <mat-icon *ngIf="!saving" color="warn">
+          save
+        </mat-icon>
+      </button>
+      <button mat-button *ngIf="this.timeLine.fragment.length">
+        <mat-icon color="warn" matTooltip="Delete all Nightmares" (click)="delete()">
+          delete
+        </mat-icon>
+      </button>
+    </div>
+
   </mat-card-header>
-  <mat-card-content  cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" #timeline>
-      <app-fragment *ngFor="let fr of timeLine.fragment; let i =index;"
+  <mat-card-content *ngIf="this.timeLine.fragment.length" >
+    <div id="schedule" class="timeline generic-background" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" >
+      <app-fragment  class="nightmare  " *ngFor="let fr of timeLine.fragment; let i =index;"
                     [fragment]="fr" (removed)="remove($event)"
                     (updated)="update($event)"
                     (inserted)="insert($event)"
                     [isLast]="timeLine.fragment.length-1 == i"
-                    [canEdit]="canEdit" cdkDrag >
+                    [canEdit]="canEdit"
+                    [statusUpdate] = updated
+                     [saving]="saving"
+                    cdkDrag >
 
       </app-fragment>
+    </div>
   </mat-card-content>
 
 

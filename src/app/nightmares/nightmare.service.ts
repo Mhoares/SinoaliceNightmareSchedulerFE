@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Nightmare} from "../shared/nightmare.model";
 import {map} from "rxjs/operators";
@@ -13,7 +13,6 @@ export class NightmareService {
 
   constructor(private http:HttpClient) { }
   getNightmares():Observable<Nightmare[]>{
-    let headers = new HttpHeaders()
     const url = `${environment.apiUrl}/nightmares`
     return this.http.get<Nightmare[]>(url).pipe(
       map(res =>{
@@ -34,5 +33,10 @@ export class NightmareService {
         return nms
       })
     )
+  }
+  getImage(icon: string):Observable<string>{
+    const url = `${environment.apiUrl}/nightmares/image`
+    let params = new HttpParams().set("icon",icon)
+    return this.http.get<string>(url, {params})
   }
 }
