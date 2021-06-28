@@ -14,6 +14,7 @@ export class FragmentComponent implements OnInit {
   @Input() fragment? :Fragment
   @Input() isLast : boolean = false
   @Input()  canEdit : boolean = false
+  @Input()  saving : boolean = false
   @Input() statusUpdate? : Subject<Map<number, boolean>>
   @Output() removed :EventEmitter<Nightmare> = new EventEmitter<Nightmare>()
   @Output()  updated :EventEmitter<Nightmare> = new EventEmitter<Nightmare>()

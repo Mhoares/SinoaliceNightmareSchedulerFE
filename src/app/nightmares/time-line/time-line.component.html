@@ -1,4 +1,4 @@
-<mat-card class="container-list generic-background">
+<mat-card class="container-list generic-background" >
   <mat-card-header>
     <mat-card-title>
       Timeline
@@ -7,8 +7,15 @@
       {{help}}
     </mat-card-subtitle>
     <div class="options">
-      <button mat-button (click)="save()" *ngIf="this.timeLine.fragment.length">
-        <mat-icon color="accent"   matTooltip="Save as image">
+      <mat-slide-toggle (change)="canSave($event)">
+        Enable save
+      </mat-slide-toggle>
+      <button mat-button  matTooltip="Save as image" [disabled]="!saving"
+              (click)="save()" *ngIf="this.timeLine.fragment.length">
+        <mat-icon *ngIf="saving" color="accent">
+          save
+        </mat-icon>
+        <mat-icon *ngIf="!saving" color="warn">
           save
         </mat-icon>
       </button>
@@ -20,15 +27,16 @@
     </div>
 
   </mat-card-header>
-  <mat-card-content>
-    <div class="timeline generic-background" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" #timeline>
-      <app-fragment  class="generic-background" *ngFor="let fr of timeLine.fragment; let i =index;"
+  <mat-card-content *ngIf="this.timeLine.fragment.length" >
+    <div id="schedule" class="timeline generic-background" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" >
+      <app-fragment  class="nightmare  " *ngFor="let fr of timeLine.fragment; let i =index;"
                     [fragment]="fr" (removed)="remove($event)"
                     (updated)="update($event)"
                     (inserted)="insert($event)"
                     [isLast]="timeLine.fragment.length-1 == i"
                     [canEdit]="canEdit"
                     [statusUpdate] = updated
+                     [saving]="saving"
                     cdkDrag >
 
       </app-fragment>

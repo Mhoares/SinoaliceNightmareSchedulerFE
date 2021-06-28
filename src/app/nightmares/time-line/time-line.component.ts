@@ -6,10 +6,10 @@ import {Fragment} from "../../shared/fragment.model";
 import {MatSnackBar} from "@angular/material/snack-bar";
 import {TimeLineService} from "../time-line.service";
 import {CdkDragDrop} from "@angular/cdk/drag-drop";
-// @ts-ignore
-import html2canvas from "html2canvas";
+import html2canvas from "html2canvas"
 import {saveAs} from "file-saver";
-import {backgroundColor} from "html2canvas/dist/types/css/property-descriptors/background-color";
+import {MatSlideToggleChange} from "@angular/material/slide-toggle";
+
 
 @Component({
   selector: 'app-time-line',
@@ -25,8 +25,8 @@ export class TimeLineComponent implements OnInit {
   action ="add"
   help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel'
   canEdit = false
+  saving = false
   snackbarDuration = 5000
-  @ViewChild('timeline') tl? : ElementRef;
   constructor(private _snackBar: MatSnackBar, private service: TimeLineService) {
     this.timeLine = service.timeline
   }
@@ -106,13 +106,27 @@ export class TimeLineComponent implements OnInit {
     }
   }
   save(){
-      html2canvas(this.tl?.nativeElement).then(canvas =>{
+      const nms = document.getElementById('schedule')
+      if (nms)
+      html2canvas(nms).then(canvas =>{
+
         canvas.toBlob( blob => {
           if (blob)
             saveAs(blob,'schedule'+new Date().getTime())
-        })
+        },"image/png")
       })
     this._snackBar.open("Saving...",'close', {duration: this.snackbarDuration})
+  }
+  canSave(e: MatSlideToggleChange){
+    this.saving = e.checked
+    if(this.saving){
+      this.service.canEdit.next(false)
+      this.service.disableEdit.next(true)
+    }else{
+      this.service.disableEdit.next(false)
+    }
+
+
   }
 
 

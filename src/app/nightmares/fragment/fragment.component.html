@@ -1,5 +1,5 @@
-<mat-card class="generic-background">
-  <mat-list role="list " class="generic-background">
+<mat-card class="generic-background" [ngClass]="{'no-space' :saving}">
+  <mat-list role="list" class="generic-background">
     <mat-list-item    role="listitem" >
       <div  class="mat-caption" matTooltip="Cast time" matTooltipPosition="above">
         {{date(fragment?.begin || 0 ) | date:'mm:ss'}}<mat-icon  [inline]="true" color="warn" >schedule</mat-icon>
@@ -19,7 +19,7 @@
     </mat-list-item>
   </mat-list>
   <mat-card-content class="generic-background">
-    <img matCardImageSmall *ngIf="img" matTooltipClass="line" [src]="this.img" [matTooltip]="fragment?.nm?.toString() || ''" >
+    <img [ngClass]="{'icon' :saving}" matCardImageSmall *ngIf="img" matTooltipClass="line" [src]="this.img" [matTooltip]="fragment?.nm?.toString() || ''" >
   </mat-card-content>
   <mat-card-actions *ngIf="canEdit" class="generic-background">
     <button  mat-icon-button color="accent"(click)="insert()"  matTooltip="Insert a Nightmare">
