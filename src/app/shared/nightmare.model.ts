@@ -150,6 +150,6 @@ export function copyNightmareFromStorage(obj:any){
     obj._GvgSkillDur,
     obj._GvgSkillLead,
     obj._GvgSkillSP,
-  obj._Global,
+    obj._Global,
     obj._Image)
 }

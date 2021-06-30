@@ -8,7 +8,12 @@
     </mat-card-subtitle>
     <div class="options">
       <mat-slide-toggle (change)="canSave($event)">
-        Enable save
+        <div *ngIf="!saving">
+          Enable save
+        </div>
+        <div *ngIf="saving">
+          Disable save
+        </div>
       </mat-slide-toggle>
       <button mat-button  matTooltip="Save as image" [disabled]="!saving"
               (click)="save()" *ngIf="this.timeLine.fragment.length">
@@ -28,19 +33,27 @@
 
   </mat-card-header>
   <mat-card-content *ngIf="this.timeLine.fragment.length" >
-    <div id="schedule" class="timeline generic-background" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" >
-      <app-fragment  class="nightmare  " *ngFor="let fr of timeLine.fragment; let i =index;"
-                    [fragment]="fr" (removed)="remove($event)"
-                    (updated)="update($event)"
-                    (inserted)="insert($event)"
-                    [isLast]="timeLine.fragment.length-1 == i"
-                    [canEdit]="canEdit"
-                    [statusUpdate] = updated
-                     [saving]="saving"
-                     [first]="!i"
-                    cdkDrag >
+    <div id="schedule" class="generic-background" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" >
+      <div class="title">
+        <mat-form-field *ngIf="canEdit">
+          <input [(ngModel)]="name" matInput placeholder="Title" #ctrl="ngModel">
+        </mat-form-field>
+        <h3 *ngIf="name && !canEdit" >{{name}}</h3>
+      </div>
+     <div class="timeline ">
+        <app-fragment  class="nightmare" *ngFor="let fr of timeLine.fragment; let i =index;"
+                      [fragment]="fr" (removed)="remove($event)"
+                      (updated)="update($event)"
+                      (inserted)="insert($event)"
+                      [isLast]="timeLine.fragment.length-1 == i"
+                      [canEdit]="canEdit"
+                      [statusUpdate] = updated
+                       [saving]="saving"
+                       [first]="!i"
+                      cdkDrag >
 
-      </app-fragment>
+        </app-fragment>
+     </div>
     </div>
   </mat-card-content>
 

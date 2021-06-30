@@ -5,7 +5,7 @@ import {MatGridListModule} from "@angular/material/grid-list";
 import {HttpClientModule} from "@angular/common/http";
 import {MatCardModule} from '@angular/material/card';
 import {MatTooltipModule} from '@angular/material/tooltip';
-import { ReactiveFormsModule } from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {MatInputModule} from '@angular/material/input';
 import {MatCheckboxModule} from '@angular/material/checkbox';
 import {MatButtonModule} from '@angular/material/button';
@@ -49,7 +49,8 @@ import {MatSelectModule} from '@angular/material/select';
     MatTableModule,
     MatSortModule,
     MatPaginatorModule,
-    MatSelectModule
+    MatSelectModule,
+    FormsModule
 
   ]
 })

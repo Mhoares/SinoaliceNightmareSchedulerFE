@@ -26,6 +26,7 @@ export class TimeLineComponent implements OnInit {
   help ='Simplified view, add Nightmares to the timeline by double clicking them in the panel'
   canEdit = false
   saving = false
+  name =''
   snackbarDuration = 5000
   constructor(private _snackBar: MatSnackBar, private service: TimeLineService) {
     this.timeLine = service.timeline
