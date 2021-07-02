@@ -2,24 +2,24 @@
   <mat-list role="list" class="generic-background">
     <mat-list-item    role="listitem" >
       <div  class="mat-caption" matTooltip="Cast time" matTooltipPosition="above">
-        {{date(fragment?.begin || 0 ) | date:'mm:ss'}}<mat-icon  [inline]="true" color="warn" >schedule</mat-icon>
+        {{date(fragment?.begin || 0 ) | date:'mm:ss':offset}}<mat-icon  [inline]="true" color="warn" >schedule</mat-icon>
       </div>
     </mat-list-item>
     <mat-list-item  *ngIf="fragment?.end?.value != fragment?.activation" role="listitem" >
       <div  class="mat-caption" matTooltip="Pop time" matTooltipPosition="above">
-        {{symbol(fragment?.activation || 0)}}{{date(fragment?.activation|| 0 ) | date:'mm:ss'}}
+        {{symbol(fragment?.activation || 0)}}{{date(fragment?.activation|| 0 ) | date:'mm:ss':offset}}
         <mat-icon color="accent"  [inline]="true">alarm</mat-icon>
       </div>
     </mat-list-item>
     <mat-list-item  *ngIf="isLast" role="listitem" >
       <div  class="mat-caption" matTooltip="End time" matTooltipPosition="above">
-        {{symbol(fragment?.end?.value || 0)}}{{date(fragment?.end?.value || 0 ) | date:'mm:ss'}}
+        {{symbol(fragment?.end?.value || 0)}}{{date(fragment?.end?.value || 0 ) | date:'mm:ss':offset}}
         <mat-icon color="primary"  [inline]="true">timer_off</mat-icon>
       </div>
     </mat-list-item>
   </mat-list>
   <mat-card-content class="generic-background">
-    <img [ngClass]="{'icon' :saving,  'first':first}" matCardImageSmall *ngIf="img" matTooltipClass="line" [src]="this.img" [matTooltip]="fragment?.nm?.toString() || ''" >
+    <img [ngClass]="{'icon' :saving,  'first':first, 'mini': fragment?.end?.value == fragment?.activation}" matCardImageSmall *ngIf="img" matTooltipClass="line" [src]="this.img" [matTooltip]="fragment?.nm?.toString() || ''" >
   </mat-card-content>
   <mat-card-actions *ngIf="canEdit" class="generic-background">
     <button  mat-icon-button color="accent"(click)="insert()"  matTooltip="Insert a Nightmare">

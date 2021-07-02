@@ -21,6 +21,7 @@ export class FragmentComponent implements OnInit {
   @Output()  updated :EventEmitter<Nightmare> = new EventEmitter<Nightmare>()
   @Output()  inserted :EventEmitter<Fragment> = new EventEmitter<Fragment>()
   img =''
+  offset =  String(new Date().getTimezoneOffset() /60)
 
   constructor(private service:NightmareService, private tlService:TimeLineService) { }
 
