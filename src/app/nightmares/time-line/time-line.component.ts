@@ -129,6 +129,9 @@ export class TimeLineComponent implements OnInit {
 
 
   }
-
+  changedSummoner(){
+    console.log('cambio summoner')
+    this.service.timeline = this.timeLine
+  }
 
 }

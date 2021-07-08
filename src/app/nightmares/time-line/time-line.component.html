@@ -36,7 +36,7 @@
     <div id="schedule" class="generic-background" cdkDropList cdkDropListOrientation="horizontal" (cdkDropListDropped)="drop($event)" >
       <div class="title">
         <mat-form-field *ngIf="canEdit">
-          <input [(ngModel)]="name" matInput placeholder="Title" #ctrl="ngModel">
+          <input  [(ngModel)]="name" matInput placeholder="Title" #ctrl="ngModel">
         </mat-form-field>
         <h3 *ngIf="name && !canEdit" >{{name}}</h3>
       </div>
@@ -50,6 +50,7 @@
                       [statusUpdate] = updated
                        [saving]="saving"
                        [first]="!i"
+                       (summoner)="changedSummoner()"
                       cdkDrag >
 
         </app-fragment>

@@ -20,6 +20,10 @@
   </mat-list>
   <mat-card-content class="generic-background">
     <img [ngClass]="{'icon' :saving,  'first':first, 'mini': fragment?.end?.value == fragment?.activation}" matCardImageSmall *ngIf="img" matTooltipClass="line" [src]="this.img" [matTooltip]="fragment?.nm?.toString() || ''" >
+    <mat-form-field *ngIf="canEdit && this.fragment">
+      <input (change)="changedSumommer()"  [(ngModel)]="this.fragment.summoner" matInput placeholder="Summoner" #ctrl="ngModel">
+    </mat-form-field>
+    <div [ngClass]="{'summoner':!saving,'caster':saving}" *ngIf="this.fragment?.summoner && !canEdit" >{{this.fragment?.summoner}}</div>
   </mat-card-content>
   <mat-card-actions *ngIf="canEdit" class="generic-background">
     <button  mat-icon-button color="accent"(click)="insert()"  matTooltip="Insert a Nightmare">

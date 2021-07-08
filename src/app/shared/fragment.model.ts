@@ -1,6 +1,13 @@
 import {BehaviorSubject, Subscription} from 'rxjs';
 import {Nightmare} from "./nightmare.model";
 export class Fragment {
+  get summoner(): string {
+    return this._summoner;
+  }
+
+  set summoner(value: string) {
+    this._summoner = value;
+  }
   get activation(): number {
     return this._activation;
   }
@@ -43,6 +50,7 @@ export class Fragment {
   private _ant?: Fragment
   private antEnd?:Subscription
   private _nm : Nightmare
+  private _summoner :string = ''
   constructor( nm :Nightmare ,ant? : Fragment, init?: number) {
     this._nm =nm
     if(ant){

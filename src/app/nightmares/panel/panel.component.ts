@@ -31,6 +31,7 @@ export class PanelComponent implements OnInit {
 
   ngOnInit(): void {
    this.filter()
+    this.searchForm.get('name')?.valueChanges.subscribe(() =>this.filter())
   }
   resetNms(){
     this.visibleNms = []

@@ -20,6 +20,7 @@ export class FragmentComponent implements OnInit {
   @Output() removed :EventEmitter<Nightmare> = new EventEmitter<Nightmare>()
   @Output()  updated :EventEmitter<Nightmare> = new EventEmitter<Nightmare>()
   @Output()  inserted :EventEmitter<Fragment> = new EventEmitter<Fragment>()
+  @Output()  summoner :EventEmitter<void> = new EventEmitter<void>()
   img =''
   offset =  String(new Date().getTimezoneOffset() /60)
 
@@ -27,6 +28,9 @@ export class FragmentComponent implements OnInit {
 
   ngOnInit(): void {
     this.fragment?.nm.getImage(this.service).then( img => this.img = img)
+  }
+  changedSumommer(){
+    this.summoner.emit()
   }
   date(s:number):Date{
 

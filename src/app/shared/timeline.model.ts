@@ -21,25 +21,29 @@ export class Timeline {
     this._init = init
     this._max = max
   }
-  add(nm :Nightmare): boolean{
+  add(nm :Nightmare, summoner? :string): boolean{
     const lenght = this._fragment.length
     let exist: Fragment|undefined
     let added = false
     if (this.totalTime() < this._max){
       if(!lenght){
         this._fragment.push(new Fragment(nm,undefined, this._init))
+        if (summoner)
+          this._fragment[this._fragment.length-1].summoner = summoner
         added = true
       } else{
         exist = this._fragment.find(f => f.nm.hasSkill(nm))
         if(!exist){
           added = true
           this._fragment.push(new Fragment(nm,this._fragment[lenght-1]))
+          if (summoner)
+            this._fragment[this._fragment.length-1].summoner = summoner
         }
       }
     }
     return added
   }
-  insert(nm :Nightmare, fr :Fragment, flex :boolean = false): boolean{
+  insert(nm :Nightmare, fr :Fragment, flex :boolean = false, summoner?:string): boolean{
     const i = this._fragment.indexOf(fr)
     const  exist = this._fragment.find(f => f.nm.hasSkill(nm))
     const last = this._fragment.length -1
@@ -54,6 +58,8 @@ export class Timeline {
     }else{
       tmp = new Fragment(nm,undefined,this._init)
     }
+    if(summoner)
+      tmp.summoner = summoner
     this._fragment[i].ant = tmp
     this._fragment.splice(i,0,tmp)
     return true
@@ -115,11 +121,12 @@ export class Timeline {
   }
   adjustTimes(current :number , previous :number){
     const  p =  this._fragment[previous].nm
+    const n = this._fragment[previous].summoner
     this.remove(p)
     if(current < this._fragment.length)
-      this.insert(p,this._fragment[current],true)
+      this.insert(p,this._fragment[current],true, n)
     else
-      this.add(p)
+      this.add(p,n)
 
   }
 }

@@ -17,7 +17,7 @@ export class TimeLineService {
     if(storage){
       obj = JSON.parse(storage)
       tmp = new Timeline(obj._init,obj._max)
-      obj._fragment.forEach((fr :any) => tmp.add(copyNightmareFromStorage(fr._nm)))
+      obj._fragment.forEach((fr :any) => tmp.add(copyNightmareFromStorage(fr._nm), fr.summoner))
     }
     else
       tmp = this._timeline
@@ -29,7 +29,7 @@ export class TimeLineService {
     obj._init = value.init
     obj._max = value.max
     obj._fragment =[]
-    value.fragment.forEach(fr => obj._fragment.push({_nm: fr.nm}))
+    value.fragment.forEach(fr => obj._fragment.push({_nm: fr.nm, summoner: fr.summoner}))
 
     localStorage.setItem('timeline',JSON.stringify(obj))
     this._timeline = value;
