@@ -1,0 +1,13 @@
+<mat-tab-group class="analyzer" (selectedTabChange)="tabChanged($event)">
+  <mat-tab  label="Inventory">
+    <app-inventory [inventory]="inventory"
+                   [selectedWp]="selectedWp"
+                   [isInventorySelected]="isInventorySelected"
+    ></app-inventory>
+  </mat-tab>
+  <mat-tab label="Analyzer"> Content 2 </mat-tab>
+</mat-tab-group>
+<app-panel *ngIf="load" [catalog]="catalog"
+                        [selectedWp]="selectedWp"
+                        [isInventorySelected]="isInventorySelected"
+                        [inventory]="inventory" ></app-panel>

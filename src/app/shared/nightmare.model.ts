@@ -1,5 +1,4 @@
 import {NightmareService} from "../nightmares/nightmare.service";
-import {Observable, Subscription} from "rxjs";
 
 export enum Rarity {
     A=3,

@@ -23,7 +23,8 @@ export class PanelComponent implements OnInit {
         chkWater:[false],
         chkWind:[false],
         chkGlobal:[true],
-        chkJP:[false]
+        chkJP:[false],
+
 
       }
     )
