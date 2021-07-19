@@ -18,6 +18,7 @@ export class PanelComponent implements OnInit {
   wps: Weapon[] = []
   visibleWps: Weapon[] = []
   searchForm: FormGroup
+  title = 'Weapons'
   types = ['All',
     Weapons.Orb,
     Weapons.Bow,
@@ -51,16 +52,17 @@ export class PanelComponent implements OnInit {
     this.isInventorySelected.subscribe(selected => {
       if (selected) {
         this.wps = this.catalog
+        this.title = 'Weapons'
         this.filter()
       } else {
         this.wps = this.inventory
+        this.title = 'Inventory'
         this.filter()
       }
     })
     this.searchForm.get('name')?.valueChanges.subscribe(() => this.filter())
     this.searchForm.get('type')?.valueChanges.subscribe(() => {
       this.filter()
-      console.log('aca')
     })
   }
 

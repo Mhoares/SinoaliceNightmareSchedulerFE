@@ -1,7 +1,7 @@
+$top :0.2%
 .panel
-  max-width: 31%
-  margin-right: auto
-  margin-top: 0.2%
+  margin-top: $top
+  flex-grow: 1
 .checkbox
   margin: 1%
   display: inline-block
@@ -24,9 +24,30 @@ mat-form-field
 .select
   margin-top: 1%
   width: 15%
-
+.inventory
+  display: flex
+  flex-flow: row nowrap
+  width: 100%
+.details
+  margin-top: $top
+  margin-left: 0.5%
+  width: 25%
+.grid
+  width: 30%
+  max-width: 30%
+  margin-top: $top
+  flex-grow: 1
 @media only screen and (max-width: 600px)
   .panel
     max-width: 90%
+    flex-wrap: wrap
+  .grid
+    width: 90%
+    max-width: 90%
+    flex-wrap: wrap
   mat-card-header
     padding-bottom: 4%
+  .details
+    width: 100%
+  .inventory
+    flex-flow: column wrap

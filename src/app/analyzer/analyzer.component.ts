@@ -5,6 +5,7 @@ import {Jobs} from "../shared/analyzer.constants";
 import {Weapon} from "../shared/weapon.class";
 import {BehaviorSubject, Subject} from "rxjs";
 import {MatTabChangeEvent} from "@angular/material/tabs";
+import {Grid} from "../shared/grid.class";
 
 @Component({
   selector: 'app-analyzer',
@@ -16,7 +17,12 @@ export class AnalyzerComponent implements OnInit {
   isInventorySelected = new BehaviorSubject<boolean>(true)
   wps: Weapon[] =[]
   catalog:Weapon[]=[]
-  inventory:Weapon[]=[]
+  get inventory():Weapon[]{
+    return this.service.inventory
+  }
+  get grid(){
+    return this.service.grid
+  }
   selectedWp: Subject<Weapon> = new Subject<Weapon>()
   constructor(private service: AnalyzerService) {
     this.service.getWeapons().then(

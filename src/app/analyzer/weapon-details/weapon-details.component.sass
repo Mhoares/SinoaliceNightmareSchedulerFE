@@ -1,0 +1,43 @@
+@mixin description($width)
+  width: $width
+  margin-left: 1%
+  display: flex
+  flex-flow: row wrap
+  justify-content: center
+img
+  width: 40%
+.picture
+  display: flex
+  flex-flow: row wrap
+  justify-content: center
+  margin-bottom: 1%
+.stats
+  @include description(80%)
+
+.result
+  @include description(90%)
+.space
+  margin-right: 4%
+.skill-input
+  width: 80%
+.skills
+  text-align: right
+form
+  margin-top: 2%
+  display: flex
+  flex-flow: row wrap
+  justify-content: center
+  margin-bottom: 0!important
+.select
+  margin-left: auto
+  width: 25%
+mat-card-content
+  display: flex
+  flex-flow: row wrap
+  justify-content: center
+input.skills::-webkit-outer-spin-button,
+input.skills::-webkit-inner-spin-button
+  display: none
+
+input.skills
+  -moz-appearance: textfield

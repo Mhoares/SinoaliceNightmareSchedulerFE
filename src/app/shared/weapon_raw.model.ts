@@ -21,4 +21,13 @@ export interface WeaponRaw {
   attribute: number;
   evo: number;
   is_infinite_evo: number;
+  max_patk: number;
+  max_matk: number;
+  max_pdef: number;
+  max_mdef: number;
+  add_patk: number;
+  add_matk: number;
+  add_pdef: number;
+  add_mdef: number;
+
 }

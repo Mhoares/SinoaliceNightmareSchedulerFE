@@ -1,1 +1,113 @@
-<p>weapon-details works!</p>
+<ng-container *ngIf="weapon">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>[ {{weapon?.rarity}} ] {{this.weapon?.name}}</mat-card-title>
+      <mat-card-subtitle> Cost: {{this.weapon?.cost}}</mat-card-subtitle>
+      <mat-form-field appearance="outline" class="select">
+        <mat-label> lb: {{weapon?.lb}}</mat-label>
+        <mat-select *ngIf="weapon" [(ngModel)]="weapon.lb">
+          <mat-option *ngFor="let lb of [0,1,2,3,4]" [value]="lb">
+            {{lb}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button  color="warn" mat-icon-button (click)="displayed.next(undefined)">
+        <mat-icon>
+          close
+        </mat-icon>
+      </button>
+    </mat-card-header>
+    <div class="picture">
+      <img mat-card-image [src]="weapon?.getImageURL(true)">
+      <div class="stats">
+        <div class="space">
+          <div class="mat-body">
+            Max P.ATK: {{weapon?.maxPatk}}
+          </div>
+
+          <div class="mat-body">
+            Max M.ATK: {{weapon?.maxMatk}}
+          </div>
+        </div>
+        <div>
+          <div class="mat-body">
+            Max P.DEF: {{weapon?.maxPdef}}
+          </div>
+
+          <div class="mat-body">
+            Max M.DEF: {{weapon?.maxMdef}}
+          </div>
+        </div>
+
+      </div>
+    </div>
+    <mat-card-content>
+      <form [formGroup]="skills">
+        <mat-form-field class="skill-input" appearance="outline" floatLabel="always">
+          <mat-label>{{weapon?.skill?.skill_name}}  SP: {{weapon.skill?.sp}}  {{weapon.skill?.targets}}T</mat-label>
+          <input formControlName="skill" matInput type="number" class="skills" placeholder="1">
+          <span matPrefix>Lv.&nbsp;</span>
+        </mat-form-field>
+        <mat-form-field class="skill-input" appearance="outline" floatLabel="always">
+          <mat-label>{{weapon?.support?.name}} ({{weapon?.support?.tier}})</mat-label>
+          <input formControlName="support" matInput type="number" class="skills" placeholder="1">
+          <span matPrefix>Lv.&nbsp;</span>
+        </mat-form-field>
+      </form>
+      <ng-container *ngIf="skillResult">
+        <div>
+          Skill effects
+        </div>
+        <div class="result">
+          <div class="space">
+            <div *ngIf="skillResult.damage" class="mat-body">
+              Damage: {{skillResult.damage| number: '1.0-0'}}
+            </div>
+
+            <div *ngIf="skillResult.recover">
+              Recover: {{skillResult.recover| number: '1.0-0'}}
+            </div>
+          </div>
+          <div class="space">
+            <div *ngIf="skillResult.patk" class="mat-body">
+              P.ATK: {{skillResult.patk| number: '1.0-0'}}
+            </div>
+            <div *ngIf="skillResult.debuff" class="mat-body">
+              P.ATK: {{skillResult.debuff.patk  | number: '1.0-0'}}
+            </div>
+            <div *ngIf="skillResult.matk" class="mat-body">
+              M.ATK: {{skillResult.matk| number: '1.0-0'}}
+            </div>
+            <div *ngIf="skillResult.debuff " class="mat-body">
+              M.ATK: {{skillResult.debuff.matk | number: '1.0-0'}}
+            </div>
+          </div>
+          <div>
+            <div *ngIf="skillResult.pdef" class="mat-body">
+              P.DEF: {{skillResult.pdef  | number: '1.0-0'}}
+            </div>
+            <div *ngIf="skillResult.debuff" class="mat-body">
+              P.DEF: {{skillResult.debuff.pdef | number: '1.0-0'}}
+            </div>
+
+            <div *ngIf="skillResult.mdef" class="mat-body">
+              M.DEF: {{skillResult.mdef| number: '1.0-0' }}
+            </div>
+            <div *ngIf="skillResult.debuff" class="mat-body">
+              M.DEF: {{skillResult.debuff.mdef | number: '1.0-0'}}
+            </div>
+          </div>
+
+        </div>
+      </ng-container>
+    </mat-card-content>
+    <mat-card-actions>
+      <button mat-icon-button (click)="destroy()">
+        <mat-icon color="warn">
+          delete
+        </mat-icon>
+      </button>
+
+    </mat-card-actions>
+  </mat-card>
+</ng-container>

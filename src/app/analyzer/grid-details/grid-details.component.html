@@ -1,0 +1,195 @@
+<ng-container *ngIf="grid">
+  <mat-card>
+    <mat-card-header>
+
+      <mat-card-title>{{this.grid.name}}</mat-card-title>
+      <mat-card-subtitle> {{this.grid.job}}</mat-card-subtitle>
+      <mat-list class="supports">
+        <mat-list-item>
+          <mat-checkbox class="mat-body" (change)="supportState()" [(ngModel)]=support>Aid Skills</mat-checkbox>
+        </mat-list-item >
+        <mat-list-item *ngIf="isBufforDebbuff()">
+          <mat-checkbox class="mat-body" (change)="supportState()" [(ngModel)]="showBurst">Show Burst</mat-checkbox>
+        </mat-list-item>
+      </mat-list>
+      <mat-form-field appearance="outline" class="select">
+        <mat-label> Rounds: {{rounds}}</mat-label>
+        <mat-select [(ngModel)]="rounds">
+          <mat-option *ngFor="let round of range" [value]="round">
+            {{round}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </mat-card-header>
+
+    <mat-card-content>
+      <ng-container *ngIf="skillResult">
+        <h3>
+          Skill effects
+        </h3>
+
+        <div class="result">
+          <div class="space line">
+            <div *ngIf="skillResult.damage && vg" class="mat-body-2 damage ">
+              Damage: {{applyRounds(skillResult.damage)| number: '1.0-0'}} <br>
+              Damage Burst:<br>
+              {{currentBurst.get(0)?.damage| number: '1.0-0'}}
+            </div>
+
+            <div *ngIf="skillResult.recover && jobs.Cleric == this.grid?.job " class="mat-body-2 recover">
+              Recover : {{applyRounds(skillResult.recover)| number: '1.0-0'}}<br>
+              Heal Burst:<br>
+              {{currentBurst.get(0)?.recover| number: '1.0-0'}}
+            </div>
+          </div>
+          <div *ngIf="isBufforDebbuff() && existBuff()" class="buff buff-color">
+            <h4>Buffs:</h4>
+            <div class="space">
+              <div *ngIf="skillResult.patk && isBufforDebbuff() && !showBurst" class="mat-body-2">
+                P.ATK: {{applyRounds(skillResult.patk)| number: '1.0-0'}}
+              </div>
+              <div *ngIf=" showBurst && isBufforDebbuff() " class="mat-body-2">
+                P.ATK: {{getTotalBurst().patk | number: '1.0-0'}}
+              </div>
+
+              <div *ngIf="skillResult.matk && isBufforDebbuff() && !showBurst" class="mat-body-2">
+                M.ATK: {{applyRounds(skillResult.matk)| number: '1.0-0'}}
+              </div>
+              <div *ngIf=" showBurst && isBufforDebbuff() " class="mat-body-2">
+                M.ATK: {{getTotalBurst().matk | number: '1.0-0'}}
+              </div>
+
+            </div>
+            <div>
+              <div *ngIf="skillResult.pdef && isBufforDebbuff() && !showBurst" class="mat-body-2">
+                P.DEF: {{applyRounds(skillResult.pdef)  | number: '1.0-0'}}
+              </div>
+              <div *ngIf=" showBurst && isBufforDebbuff() " class="mat-body-2">
+                P.DEF: {{getTotalBurst().pdef | number: '1.0-0'}}
+              </div>
+
+
+              <div *ngIf="skillResult.mdef && isBufforDebbuff() && !showBurst" class="mat-body-2">
+                M.DEF: {{applyRounds(skillResult.mdef)| number: '1.0-0' }}
+              </div>
+              <div *ngIf=" showBurst && isBufforDebbuff() " class="mat-body-2">
+                M.DEF: {{getTotalBurst().mdef | number: '1.0-0'}}
+              </div>
+              <div  *ngIf=" !showBurst" class="mat-body-2">
+                Total: {{applyRounds(buffTotal) | number: '1.0-0'}}
+              </div>
+              <div *ngIf=" showBurst" class="mat-body-2">
+                Total: {{totalBurstBuff | number: '1.0-0'}}
+              </div>
+            </div>
+          </div>
+          <div *ngIf="skillResult.debuff && isBufforDebbuff()" class="debuff debuff-color">
+            <h4>Debuff:</h4>
+            <div class="space">
+
+              <div *ngIf="skillResult.debuff && isBufforDebbuff() && !showBurst" class="mat-body-2 ">
+                P.ATK: {{applyRounds(skillResult.debuff.patk)  | number: '1.0-0'}}
+              </div>
+              <div *ngIf=" showBurst && isBufforDebbuff() && getTotalBurst().debuff" class="mat-body-2">
+                P.ATK: {{getTotalBurst().debuff?.patk | number: '1.0-0'}}
+              </div>
+
+              <div *ngIf="skillResult.debuff && isBufforDebbuff() && !showBurst" class="mat-body-2">
+                M.ATK: {{applyRounds(skillResult.debuff.matk) | number: '1.0-0'}}
+              </div>
+              <div *ngIf=" showBurst && isBufforDebbuff() && getTotalBurst().debuff" class="mat-body-2">
+                M.ATK: {{getTotalBurst().debuff?.matk | number: '1.0-0'}}
+              </div>
+            </div>
+            <div>
+
+              <div *ngIf="skillResult.debuff && isBufforDebbuff() && !showBurst" class="mat-body-2">
+                P.DEF: {{applyRounds(skillResult.debuff.pdef) | number: '1.0-0'}}
+              </div>
+              <div *ngIf=" showBurst && isBufforDebbuff() && getTotalBurst().debuff" class="mat-body-2">
+                P.DEF: {{getTotalBurst().debuff?.pdef | number: '1.0-0'}}
+              </div>
+              <div *ngIf="skillResult.debuff && isBufforDebbuff()&& !showBurst" class="mat-body-2">
+                M.DEF: {{applyRounds(skillResult.debuff.mdef) | number: '1.0-0'}}
+              </div>
+              <div *ngIf=" showBurst && isBufforDebbuff() && getTotalBurst().debuff" class="mat-body-2">
+                M.DEF: {{getTotalBurst().debuff?.mdef | number: '1.0-0'}}
+              </div>
+              <div *ngIf=" !showBurst" class="mat-body-2">
+               Total: {{applyRounds(debuffTotal) | number: '1.0-0'}}
+              </div>
+              <div *ngIf=" showBurst" class="mat-body-2">
+                Total: {{totalBurstDeBuff | number: '1.0-0'}}
+              </div>
+            </div>
+
+
+          </div>
+          <div class="aids" *ngIf="aids && aids.length">
+            <h4>Aid Skills</h4>
+            <ng-container *ngFor=" let aid of aids">
+
+                <div class="mat-body-2">
+                  {{aid.name}}({{aid.tier}}): {{aid.quantity}}
+                </div>
+
+
+
+                <div class="mat-body-2">
+                Boost: {{aid.boost | number: '1.1-1'}}%
+                </div>
+
+
+            </ng-container>
+            <div *ngIf="totalBoost" class="mat-body-2">
+              Total Boost: {{totalBoost | number: '1.1-1'}}%
+            </div>
+
+          </div>
+
+        </div>
+        <div *ngIf="isPieChartEnabled && !isRadarChartEnabled" class="chart-wrapper chart">
+          <canvas baseChart
+                  [data]="pieChartData"
+                  [labels]="pieChartLabels"
+                  [chartType]="pieChartType"
+                  [options]="pieChartOptions"
+                  [plugins]="pieChartPlugins"
+                  [legend]="pieChartLegend"
+                  [colors]="pieChartColors">
+          </canvas>
+        </div>
+        <div *ngIf="!isPieChartEnabled && isRadarChartEnabled"class="chart-wrapper radar">
+          <canvas baseChart
+                  [datasets]="radarChartData"
+                  [options]="radarChartOptions"
+                  [labels]="radarChartLabels"
+                  [chartType]="radarChartType">
+          </canvas>
+        </div>
+
+
+      </ng-container>
+    </mat-card-content>
+    <mat-card-actions>
+      <mat-form-field appearance="outline" class="elements">
+        <mat-label> Element: {{elementNames[selectedElement] || "All"}}</mat-label>
+        <mat-select [(ngModel)]="selectedElement" (selectionChange)="selectChart(selectedChart)">
+          <mat-option *ngFor="let element of elementNames; let i = index" [value]="i">
+            {{element || "All"}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="charts">
+        <mat-label> Chart: {{selectedChart}}</mat-label>
+        <mat-select [(ngModel)]="selectedChart" (selectionChange)="selectChart($event.value)" [disabled]="!chartNames.length">
+          <mat-option *ngFor="let chart of chartNames" [value]="chart">
+            {{chart || "All"}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+
+    </mat-card-actions>
+  </mat-card>
+</ng-container>

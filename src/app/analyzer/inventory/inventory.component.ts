@@ -4,6 +4,8 @@ import {BehaviorSubject, Subject} from "rxjs";
 import {Attribute} from "../../shared/nightmare.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {Weapons} from "../../shared/analyzer.constants";
+import {AnalyzerService} from "../analyzer.service";
+import {Grid} from "../../shared/grid.class";
 
 
 @Component({
@@ -15,6 +17,11 @@ export class InventoryComponent implements OnInit {
   @Input() inventory: Weapon[] = []
   @Input() selectedWp: Subject<Weapon> = new Subject<Weapon>()
   @Input() isInventorySelected = new BehaviorSubject<boolean>(true)
+  @Input() currentGrid?: BehaviorSubject<Grid>
+  @Input() cols = 6
+  @Input()  showAsGrid = false
+  grid?: Grid
+  displayedWeapon = new BehaviorSubject<Weapon | undefined>(undefined)
   visibleWps: Weapon[] = []
   searchForm: FormGroup
   types = ['All',
@@ -26,7 +33,8 @@ export class InventoryComponent implements OnInit {
     Weapons.Pole,
     Weapons.Sword,
     Weapons.Hammer]
-  constructor(private fb: FormBuilder) {
+
+  constructor(private service: AnalyzerService, private fb: FormBuilder) {
     this.searchForm = this.fb.group(
       {
         name: [''],
@@ -45,21 +53,49 @@ export class InventoryComponent implements OnInit {
 
   ngOnInit(): void {
     this.filter()
-    this.selectedWp.asObservable().subscribe( w =>{
-      if (this.isInventorySelected.value ){
-        const exists = this.inventory.find( wp => wp.name == w.name)
-        if(!exists){
-          this.inventory.push(w.clone())
-          this.filter()
-        }
+    this.currentGrid?.asObservable().subscribe(g => {
+      this.grid = g
+      this.inventory = g._weapons
+      this.filter()
+      this.displayedWeapon.next(undefined)
+      this.grid.change$.subscribe(() => this.filter())
+
+    })
+
+    this.selectedWp.asObservable().subscribe(w => {
+      if (this.isInventorySelected.value) {
+        this.service.addToInventory(w)
+        this.filter()
+
+      } else if (this.grid) {
+        this.service.addToGrid(w)
+        this.filter()
+
       }
+    })
+    this.isInventorySelected.subscribe(selected=>{
+      if (this.grid && selected)
+        this.displayedWeapon.next(undefined)
+    })
+    if (!this.grid)
+      this.service.inventoryChanged.asObservable().subscribe(() => {
+        this.filter()
+      })
+
+
+
+    this.searchForm.get('name')?.valueChanges.subscribe(() => this.filter())
+    this.searchForm.get('type')?.valueChanges.subscribe(() => {
+      this.filter()
     })
 
   }
+
   reset() {
     this.visibleWps = []
     this.inventory.forEach(w => this.visibleWps.push(w))
   }
+
   filter() {
     const name = this.searchForm.get('name')
     const chkL = this.searchForm.get('chkL')
@@ -98,7 +134,7 @@ export class InventoryComponent implements OnInit {
     if (chkWind && chkWind.value) {
       filterAttribute.push(Attribute.Wind)
     }
-    if(filterType && 'All' != filterType.value)
+    if (filterType && 'All' != filterType.value)
       this.visibleWps = this.visibleWps.filter(w => w.type == filterType.value)
 
     if (filterRarity.length || filterAttribute.length)

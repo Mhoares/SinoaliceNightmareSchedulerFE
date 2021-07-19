@@ -1,38 +1,46 @@
-<mat-card class="panel">
-  <mat-card-header>
-    <form class="form" [formGroup]="searchForm">
-      <mat-form-field>
-        <mat-label>Name</mat-label>
-        <input matInput placeholder="Ex. " formControlName="name">
-      </mat-form-field>
+<div class="inventory">
+  <mat-card [ngClass]="{'panel':!showAsGrid, 'grid':showAsGrid}">
+    <mat-card-header>
+      <form class="form" [formGroup]="searchForm">
+        <mat-form-field>
+          <mat-label>Name</mat-label>
+          <input matInput placeholder="Ex. " formControlName="name">
+        </mat-form-field>
 
-      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkL">L</mat-checkbox>
-      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkSR">SR</mat-checkbox>
-      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkS">S</mat-checkbox>
-      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkA">A</mat-checkbox>
-      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkWater">Water</mat-checkbox>
-      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkFire">Fire</mat-checkbox>
-      <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkWind">Wind</mat-checkbox>
-      <mat-form-field appearance="fill" class="select">
-        <mat-label>Type</mat-label>
-        <mat-select formControlName="type">
-          <mat-option *ngFor="let type of types" [value]="type">
-            {{type}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </form>
+        <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkL">L</mat-checkbox>
+        <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkSR">SR</mat-checkbox>
+        <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkS">S</mat-checkbox>
+        <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkA">A</mat-checkbox>
+        <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkWater">Water</mat-checkbox>
+        <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkFire">Fire</mat-checkbox>
+        <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkWind">Wind</mat-checkbox>
+        <mat-form-field appearance="fill" class="select">
+          <mat-label>Type</mat-label>
+          <mat-select formControlName="type">
+            <mat-option *ngFor="let type of types" [value]="type">
+              {{type}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </form>
 
-  </mat-card-header>
-  <mat-grid-list cols="6">
-    <mat-grid-tile *ngFor="let wp of visibleWps">
-      <div class="slot" matRipple>
-        <img [matTooltip]="wp.toString()" matTooltipClass="line" class="mat-img" [src]="wp.getImageURL()"/>
-      </div>
-    </mat-grid-tile>
-  </mat-grid-list>
-  <mat-card-content>
+    </mat-card-header>
+    <mat-grid-list [cols]="cols">
+      <mat-grid-tile *ngFor="let wp of visibleWps">
+        <div class="slot" matRipple>
+          <img [matTooltip]="wp.toString()"
+               matTooltipClass="line" class="mat-img"
+               (dblclick)="this.displayedWeapon.next(wp)"
+               [src]="wp.getImageURL()"/>
+        </div>
+      </mat-grid-tile>
+    </mat-grid-list>
+    <mat-card-content>
 
-  </mat-card-content>
-
-</mat-card>
+    </mat-card-content>
+  </mat-card>
+  <app-weapon-details  class="details" *ngIf="this.displayedWeapon| async"
+                      [displayed]="displayedWeapon"
+                      [currentGrid]="this.currentGrid"></app-weapon-details>
+  <ng-content></ng-content>
+</div>

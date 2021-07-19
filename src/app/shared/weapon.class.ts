@@ -13,7 +13,16 @@ export class Weapon {
     public evo: number,
     public is_infinite_evo: number,
     public skill: Skill,
-    public support: SupportSkill
+    public support: SupportSkill,
+    public max_patk: number,
+    public max_matk: number,
+    public max_pdef: number,
+    public max_mdef: number,
+    public add_patk: number,
+    public add_matk: number,
+    public add_pdef: number,
+    public add_mdef: number,
+    public lb: number = 0
   ) {
   }
 
@@ -29,25 +38,54 @@ export class Weapon {
       this.evo,
       this.is_infinite_evo,
       this.skill.clone(),
-      this.support.clone()
+      this.support.clone(),
+      this.max_patk,
+      this.max_matk,
+      this.max_pdef,
+      this.max_mdef,
+      this.add_patk,
+      this.add_matk,
+      this.add_pdef,
+      this.add_mdef,
+      this.lb
     )
   }
-  public toString(): string{
+
+  get maxMdef(): number {
+    return this.max_mdef - (((4 - this.lb) * 10) * this.add_mdef)
+  }
+
+  get maxPdef(): number {
+    return this.max_pdef - (((4 - this.lb) * 10) * this.add_pdef)
+  }
+
+  get maxPatk(): number {
+    return this.max_patk - (((4 - this.lb) * 10) * this.add_patk)
+  }
+
+  get maxMatk(): number {
+    return this.max_matk - (((4 - this.lb) * 10) * this.add_matk)
+  }
+
+  public toString(): string {
     return `${this.name}
             cost: ${this.cost}
             Skill: ${this.skill.skill_name}
             Aid Skill: ${this.support.name}`
   }
-  public getImageURL():string{
-    let tmp =''
-    if ( this.resource_id/10 < 1){
-      tmp+='000'
-    }else if (this.resource_id/100 < 1){
-      tmp+='00'
-    }else if (this.resource_id/1000 < 1){
-      tmp+='0'
+
+  public getImageURL(large = false): string {
+    let tmp = 'https://sinoalice.picobin.com/cards/cards'
+    if (large)
+      tmp = 'https://sinoalice.game-db.tw/images/cardL/CardL'
+    if (this.resource_id / 10 < 1) {
+      tmp += '000'
+    } else if (this.resource_id / 100 < 1) {
+      tmp += '00'
+    } else if (this.resource_id / 1000 < 1) {
+      tmp += '0'
     }
-    return `https://sinoalice.picobin.com/cards/cards${tmp}${this.resource_id}.png`
+    return `${tmp}${this.resource_id}.png`
   }
 }
 
@@ -172,6 +210,7 @@ export class Skill {
       tmp.matk *= 0.05 * 0.95 * this.targets
       if (supports)
         tmp.matk = this.applySupport('Support Boon', supports, tmp.matk)
+
     }
     if (this.mdef) {
       if (self.job)
@@ -180,6 +219,19 @@ export class Skill {
       if (supports)
         tmp.mdef = this.applySupport('Support Boon', supports, tmp.mdef)
     }
+    if (this.weapon == Weapons.Book) {
+      tmp.debuff = {
+        patk: tmp.patk,
+        pdef: tmp.pdef,
+        mdef: tmp.mdef,
+        matk: tmp.matk
+      }
+      tmp.mdef = 0
+      tmp.matk = 0
+      tmp.pdef = 0
+      tmp.patk = 0
+    }
+
     return tmp
   }
 
@@ -194,11 +246,41 @@ export class Skill {
     const total = apply.reduce((a, b) => {
       const value = b.value && 'boost' in b.value && b.value['boost']
       if (value)
-        return a + ((1 + (value / 100)) * (1 + (b.rate / 100)))
+        return a + ((value / 100) * (b.rate / 100))
       return a
     }, 0) || 1
 
-    return target * total
+    return (1 + total) * target
+  }
+
+  calculateBurst(self: Stats, supports?: SupportSkill[], enemy?: Stats): SkillResult  {
+    let tmp: SkillResult | undefined = this.calculate(self, supports, enemy)
+    if (tmp) {
+      tmp.recover = this.getBurst(tmp.recover)
+      tmp.damage = this.getBurst(tmp.damage)
+      tmp.pdef = this.getBurst(tmp.pdef)
+      tmp.mdef = this.getBurst(tmp.mdef)
+      tmp.matk = this.getBurst(tmp.matk)
+      tmp.patk = this.getBurst(tmp.patk)
+      if(tmp.debuff){
+        tmp.debuff.pdef = this.getBurst(tmp.debuff.pdef)
+        tmp.debuff.mdef = this.getBurst(tmp.debuff.mdef)
+        tmp.debuff.matk = this.getBurst(tmp.debuff.matk)
+        tmp.debuff.patk = this.getBurst(tmp.debuff.patk)
+      }
+
+    }
+
+    return tmp
+  }
+
+  getBurst(stat: number): number {
+    let tmpStat = stat
+    tmpStat /= this.targets
+    tmpStat /= this.sp
+    tmpStat /= (1 / this.targets)
+
+    return tmpStat
   }
 }
 
@@ -210,7 +292,8 @@ export class SupportSkill {
               public rate: number,
               public value?: Record<string, number>[]) {
   }
-  public clone():SupportSkill{
+
+  public clone(): SupportSkill {
     return new SupportSkill(
       this.level,
       this.name,
@@ -238,5 +321,13 @@ export interface SkillResult {
   matk: number,
   pdef: number,
   mdef: number
+  debuff?: Debuff
 
+}
+
+export interface Debuff {
+  patk: number,
+  matk: number,
+  pdef: number,
+  mdef: number
 }

@@ -1,7 +1,12 @@
 <mat-card class="panel">
   <mat-card-header>
-    <mat-card-title>Weapons</mat-card-title>
+    <mat-card-title>{{title}}</mat-card-title>
     <form class="form" [formGroup]="searchForm" >
+      <mat-form-field>
+        <mat-label>Name</mat-label>
+        <input matInput placeholder="Ex. " formControlName="name">
+      </mat-form-field>
+
       <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkL">L</mat-checkbox>
       <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkSR">SR</mat-checkbox>
       <mat-checkbox class="checkbox" (change)="filter()" formControlName="chkS">S</mat-checkbox>

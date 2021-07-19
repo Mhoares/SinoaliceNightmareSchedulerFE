@@ -1,0 +1,79 @@
+<app-inventory *ngIf="grid" [inventory]="inventory"
+               [selectedWp]="selectedWp"
+               [isInventorySelected]="isInventorySelected"
+               [currentGrid]="currentGrid"
+               [cols]="6"
+               [showAsGrid]=true>
+  <mat-card *ngIf="grid" class="stats">
+
+    <mat-card-header>
+      <mat-card-title>{{grid.name || 'Grid analyzer'}}</mat-card-title>
+    </mat-card-header>
+
+    <mat-card-content>
+      <form class="description" [formGroup]="description">
+        <mat-form-field *ngIf="grids.length" appearance="outline" class="field">
+          <mat-label>Grid</mat-label>
+          <mat-select (selectionChange)="setGrid($event)" formControlName="grid">
+            <mat-option *ngFor="let g of grids" [value]="g.id" [disabled]="g.id == this.grid.id">
+              {{g.name}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label> Grid Name</mat-label>
+          <input matInput formControlName="name" placeholder="0">
+        </mat-form-field>
+
+        <mat-form-field appearance="outline" class="field">
+          <mat-label> job</mat-label>
+          <mat-select formControlName="job">
+            <mat-option *ngFor="let job of jobs" [value]="job">
+              {{job.toString()}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label> P.Atk</mat-label>
+          <input matInput type="number" formControlName="patk" placeholder="0">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label> M.Atk</mat-label>
+          <input formControlName="matk" type="number" matInput placeholder="0">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label> P.Def</mat-label>
+          <input formControlName="pdef" type="number" matInput placeholder="0">
+        </mat-form-field>
+        <mat-form-field appearance="outline" class="field">
+          <mat-label> M.Def</mat-label>
+          <input matInput formControlName="mdef" type="number" placeholder="0">
+        </mat-form-field>
+        <mat-checkbox formControlName="hnm">HNM</mat-checkbox>
+      </form>
+
+    </mat-card-content>
+    <mat-card-actions *ngIf="grid.job != undefined">
+      <button mat-icon-button (click)="reset()" color="warn">
+        <mat-icon>
+          delete
+        </mat-icon>
+      </button>
+      <button *ngIf="!exist()" mat-icon-button (click)="save()" color="accent">
+        <mat-icon>
+          save
+        </mat-icon>
+      </button>
+      <button *ngIf="exist()" mat-icon-button (click)="add()" color="accent">
+        <mat-icon>
+          add
+        </mat-icon>
+      </button>
+
+    </mat-card-actions>
+  </mat-card>
+  <app-grid-details>
+
+  </app-grid-details>
+</app-inventory>
+

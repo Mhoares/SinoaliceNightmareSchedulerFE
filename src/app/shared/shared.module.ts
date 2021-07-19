@@ -23,6 +23,7 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTabsModule} from '@angular/material/tabs';
+import { ChartsModule } from 'ng2-charts';
 @NgModule({
   declarations: [],
   imports: [
@@ -52,8 +53,8 @@ import {MatTabsModule} from '@angular/material/tabs';
     MatPaginatorModule,
     MatSelectModule,
     FormsModule,
-    MatTabsModule
-
+    MatTabsModule,
+    ChartsModule
   ]
 })
 export class SharedModule { }
