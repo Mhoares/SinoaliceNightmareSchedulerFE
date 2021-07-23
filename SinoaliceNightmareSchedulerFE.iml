@@ -10,5 +10,10 @@
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="@types/file-saver" level="application" />
     <orderEntry type="library" name="@types/dom-to-image" level="application" />
+    <orderEntry type="library" name="@types/gapi.client.essentialcontacts" level="application" />
+    <orderEntry type="library" name="@types/gapi.auth2" level="application" />
+    <orderEntry type="library" name="@types/gapi" level="application" />
+    <orderEntry type="library" name="@types/gapi.client.drive" level="application" />
+    <orderEntry type="library" name="api" level="application" />
   </component>
 </module>

@@ -6,7 +6,6 @@ import { NightmaresComponent } from './nightmares.component';
 import {SharedModule} from "../shared/shared.module";
 import { NightmareComponent } from './nightmare/nightmare.component';
 import { PanelComponent } from './panel/panel.component';
-import { MatCheckboxModule } from '@angular/material/checkbox';
 import { TimeLineComponent } from './time-line/time-line.component';
 import { FragmentComponent } from './fragment/fragment.component';
 

@@ -14,14 +14,14 @@ import {Grid, StorageGrid} from "../shared/grid.class";
 export class AnalyzerService {
   boostDefinitions: BehaviorSubject<Map<string, SupportSkillDefinition>> = new BehaviorSubject<Map<string, SupportSkillDefinition>>(new Map<string, SupportSkillDefinition>())
   inventory: Weapon[] = []
-  antGridChange?:Subscription
+  antGridChange?: Subscription
   grid = new BehaviorSubject<Grid>(new Grid({
-    patk: 0,
-    pdef: 0,
-    matk: 0,
-    mdef: 0,
-    hnm: false
-  }, 'default',
+      patk: 0,
+      pdef: 0,
+      matk: 0,
+      mdef: 0,
+      hnm: false
+    }, 'default',
     new Date().getTime()))
   grids: Grid[] = []
   inventoryChanged = new Subject<void>()
@@ -32,7 +32,7 @@ export class AnalyzerService {
     this.inventoryChanged.asObservable().subscribe(() => this.writeInventory())
 
     this.grid.asObservable().subscribe(value => {
-      if(!this.antGridChange)
+      if (!this.antGridChange)
         this.antGridChange = value.change$.subscribe(() => this.writeGrids())
       else {
         this.antGridChange.unsubscribe()
@@ -73,14 +73,15 @@ export class AnalyzerService {
 
     this.grids.forEach((g) => {
       const tmp: StorageGrid = {
-          id:g.id,
+        id: g.id,
         _job: g.job,
         _weapons: g._weapons,
         _stats: g.stats,
         supports: g.supports,
         _name: g.name
       }
-      storage.push(tmp)
+      if (g.isOwner)
+        storage.push(tmp)
     })
     localStorage.setItem('grid', JSON.stringify(storage))
   }
@@ -94,11 +95,12 @@ export class AnalyzerService {
     }
 
   }
-  delete(){
 
-    this.grids.forEach(( g, i) =>{
-      if(g.id == this.grid.value.id){
-        this.grids.splice(i,1)
+  delete() {
+
+    this.grids.forEach((g, i) => {
+      if (g.id == this.grid.value.id) {
+        this.grids.splice(i, 1)
 
       }
     })
@@ -115,8 +117,15 @@ export class AnalyzerService {
     this.grid.value.change.next()
 
   }
+
   exist(g: Grid) {
     return this.grids.find(gr => g.id == gr.id)
+  }
+
+  getStoredGrids(): StorageGrid[] | undefined {
+    const storage = localStorage.getItem('grid')
+    const gridsStored: StorageGrid[] = storage && JSON.parse(storage)
+    return gridsStored
   }
 
   readGrids() {
@@ -127,18 +136,18 @@ export class AnalyzerService {
 
     if (gridsStored) {
       gridsStored.forEach(g => {
-        weapons =[]
-        g._weapons.forEach(w =>{
+        weapons = []
+        g._weapons.forEach(w => {
           const found = this.findInInventory(w)
           if (found)
-              weapons.push(found)
+            weapons.push(found)
         })
-        tmp = new Grid(g._stats, g._name, g.id,g._job)
+        tmp = new Grid(g._stats, g._name, g.id, g._job,true)
         tmp._weapons = weapons
         this.grids.push(tmp)
 
       })
-      if (tmp){
+      if (tmp) {
         this.grid.next(tmp)
         this.grid.value.change.next()
       }
@@ -146,7 +155,8 @@ export class AnalyzerService {
     }
 
   }
-  findInInventory(w: Weapon): Weapon | undefined{
+
+  findInInventory(w: Weapon): Weapon | undefined {
     const found = this.inventory.find(wp => wp.id == w.id)
 
     return found
@@ -169,7 +179,8 @@ export class AnalyzerService {
 
     return this.grid.value.add(w)
   }
-  removeFromGrids(w: Weapon){
+
+  removeFromGrids(w: Weapon) {
     this.grid.value.remove(w)
     this.grids.forEach(g => g.remove(w))
   }

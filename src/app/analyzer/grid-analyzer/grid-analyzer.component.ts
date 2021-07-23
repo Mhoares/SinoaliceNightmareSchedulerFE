@@ -6,6 +6,7 @@ import {AnalyzerConstants, Jobs} from "../../shared/analyzer.constants";
 import {FormBuilder, FormGroup} from "@angular/forms";
 import {AnalyzerService} from "../analyzer.service";
 import {MatSelectChange} from "@angular/material/select";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-grid-analyzer',
@@ -31,7 +32,7 @@ export class GridAnalyzerComponent implements OnInit {
   description: FormGroup
   jobs = [Jobs.Cleric, Jobs.Breaker, Jobs.Crusher, Jobs.Mage, Jobs.Polearm, Jobs.Gunner, Jobs.Sorcerer, Jobs.Minstrel]
 
-  constructor(private fb: FormBuilder, private service: AnalyzerService) {
+  constructor(private fb: FormBuilder, private service: AnalyzerService,  private _snackBar: MatSnackBar) {
 
     this.description = this.fb.group({
       name: [''],
@@ -68,6 +69,10 @@ export class GridAnalyzerComponent implements OnInit {
       if (value && this.grid) {
         this.grid.job = value
         this.grid.change.next()
+        if(this.grid.job != value && this.grid._weapons.length){
+          this._snackBar.open(`${this.currentGrid.value.job} can't be changed to ${value}`, "close", {duration: 5000})
+          this.description.get('job')?.setValue(this.grid.job)
+        }
       }
     })
     this.description.get('patk')?.valueChanges.subscribe(() => {
@@ -121,18 +126,22 @@ export class GridAnalyzerComponent implements OnInit {
     return this.service.grids
   }
   reset(){
+    this._snackBar.open(`${this.currentGrid.value.name} has been removed`, "close", {duration: 5000})
     this.service.delete()
 
   }
   save(){
     if (this.grid)
       this.service.addGrid(this.grid)
+    this._snackBar.open(`${this.currentGrid.value.name} has been saved`, "close", {duration: 5000})
+
   }
   exist():Grid | undefined{
     if (this.grid)
       return this.service.exist(this.grid)
     return undefined
   }
+
   add(){
     this.service.addGrid(new Grid({
           patk: 0,
@@ -143,6 +152,7 @@ export class GridAnalyzerComponent implements OnInit {
         },
         "New Grid",
       new Date().getTime()))
+    this._snackBar.open(`${this.currentGrid.value.name} has been added`, "close", {duration: 5000})
   }
 
   setGrid(selected: MatSelectChange){

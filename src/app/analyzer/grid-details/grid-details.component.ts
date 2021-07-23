@@ -77,6 +77,12 @@ export class GridDetailsComponent implements OnInit {
 
 
   }
+  get currentTotalStats(): number{
+    return this.currentGrid.value.stats.patk
+    + this.currentGrid.value.stats.matk
+    + this.currentGrid.value.stats.mdef
+    + this.currentGrid.value.stats.pdef
+  }
 
   ngOnInit(): void {
     this.currentGrid?.asObservable().subscribe(g => {
@@ -274,7 +280,7 @@ export class GridDetailsComponent implements OnInit {
   }
 
   isBufforDebbuff(): boolean {
-    return this.jobs.Minstrel == this.grid?.job || this.jobs.Sorcerer == this.grid?.job
+    return Jobs.Minstrel == this.grid?.job || Jobs.Sorcerer == this.grid?.job
   }
 
   existBuff(): boolean {

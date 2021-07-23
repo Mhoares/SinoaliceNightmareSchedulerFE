@@ -1,11 +1,13 @@
 import {Component, Input, OnInit} from '@angular/core';
-import {Weapon} from "../../shared/weapon.class";
+import {SkillResult, Stats, SupportSkill, Weapon} from "../../shared/weapon.class";
 import {BehaviorSubject, Subject} from "rxjs";
 import {Attribute} from "../../shared/nightmare.model";
 import {FormBuilder, FormGroup} from "@angular/forms";
-import {Weapons} from "../../shared/analyzer.constants";
+import {AnalyzerConstants, Jobs, Weapons} from "../../shared/analyzer.constants";
 import {AnalyzerService} from "../analyzer.service";
 import {Grid} from "../../shared/grid.class";
+import {MatSnackBar} from "@angular/material/snack-bar";
+import {Sort} from "@angular/material/sort";
 
 
 @Component({
@@ -19,7 +21,9 @@ export class InventoryComponent implements OnInit {
   @Input() isInventorySelected = new BehaviorSubject<boolean>(true)
   @Input() currentGrid?: BehaviorSubject<Grid>
   @Input() cols = 6
-  @Input()  showAsGrid = false
+  @Input() showAsGrid = false
+  snackbarTime = 5000
+  sortState?:Sort
   grid?: Grid
   displayedWeapon = new BehaviorSubject<Weapon | undefined>(undefined)
   visibleWps: Weapon[] = []
@@ -34,7 +38,7 @@ export class InventoryComponent implements OnInit {
     Weapons.Sword,
     Weapons.Hammer]
 
-  constructor(private service: AnalyzerService, private fb: FormBuilder) {
+  constructor(private service: AnalyzerService, private fb: FormBuilder, private _snackBar: MatSnackBar) {
     this.searchForm = this.fb.group(
       {
         name: [''],
@@ -63,17 +67,28 @@ export class InventoryComponent implements OnInit {
     })
 
     this.selectedWp.asObservable().subscribe(w => {
+
+      let msg = `${w.name} can't be added`
       if (this.isInventorySelected.value) {
-        this.service.addToInventory(w)
+        if (this.service.addToInventory(w))
+          msg = `${w.name} has been added`
         this.filter()
-
+        if (this.isInventorySelected.value &&!this.grid)
+            this._snackBar.open(msg, "close", {duration: this.snackbarTime,horizontalPosition:'end', verticalPosition:'bottom'})
       } else if (this.grid) {
-        this.service.addToGrid(w)
+        if (this.service.addToGrid(w))
+          msg = `${w.name} has been added`
         this.filter()
-
+        if (!this.isInventorySelected.value && this.grid && this.currentGrid?.value.job)
+          this._snackBar.open(msg, "close", {duration: this.snackbarTime,horizontalPosition:'end', verticalPosition:'bottom'})
+        else if(!this.isInventorySelected.value && this.grid && !this.grid.job){
+          this._snackBar.open(msg+", please select a job before adding a weapon", "close", {duration: this.snackbarTime,horizontalPosition:'end', verticalPosition:'bottom'})
+        }
       }
+
+
     })
-    this.isInventorySelected.subscribe(selected=>{
+    this.isInventorySelected.subscribe(selected => {
       if (this.grid && selected)
         this.displayedWeapon.next(undefined)
     })
@@ -81,7 +96,6 @@ export class InventoryComponent implements OnInit {
       this.service.inventoryChanged.asObservable().subscribe(() => {
         this.filter()
       })
-
 
 
     this.searchForm.get('name')?.valueChanges.subscribe(() => this.filter())
@@ -152,6 +166,67 @@ export class InventoryComponent implements OnInit {
         }
         return isValid
       })
+     if(this.sortState)
+       this.sortData(this.sortState)
+  }
+  selectDisplayed(wp:Weapon){
+    this.displayedWeapon.next(wp)
+  }
+  sortData(sort: Sort){
+    this.sortState = sort
+    let supports:SupportSkill []
+
+    const data = this.visibleWps.slice();
+
+    if (!sort.active || sort.direction === '' ) {
+      this.visibleWps = data;
+      return;
+    }
+    if (this.grid && this.currentGrid?.value.supports)
+      supports = this.currentGrid?.value.supportSkills
+
+    if (this.currentGrid)
+    this.visibleWps = data.sort((a, b) => {
+      const isAsc = sort.direction === 'asc';
+      let AResult :SkillResult = AnalyzerConstants.voidSKillResult
+      let BResult :SkillResult = AnalyzerConstants.voidSKillResult
+
+      if (this.currentGrid){
+        AResult = a.skill.calculate(this.currentGrid.value.stats,supports, this.currentGrid.value.enemy)
+        BResult = b.skill.calculate(this.currentGrid.value.stats,supports, this.currentGrid.value.enemy)
+
+      }
+
+      switch (sort.active) {
+        case 'heal': return this.compare(AResult.recover, BResult.recover, isAsc);
+        case 'damage': return this.compare(AResult.damage,BResult.damage, isAsc);
+        case 'P.ATK': return this.compare(AResult.patk,BResult.patk, isAsc);
+        case 'M.ATK': return this.compare(AResult.matk, BResult.matk, isAsc);
+        case 'M.DEF': return this.compare(AResult.mdef,BResult.mdef, isAsc);
+        case 'P.DEF': return this.compare(AResult.pdef,BResult.pdef, isAsc);
+        case 'Debuff P.ATK': return this.compare(AResult.debuff?.patk || 0,BResult.debuff?.patk  || 0, isAsc);
+        case 'Debuff M.ATK': return this.compare(AResult.debuff?.matk || 0, BResult.debuff?.matk  || 0, isAsc);
+        case 'Debuff M.DEF': return this.compare(AResult.debuff?.mdef || 0, BResult.debuff?.mdef  || 0, isAsc);
+        case 'Debuff P.DEF': return this.compare(AResult.debuff?.pdef || 0,BResult.debuff?.pdef  || 0, isAsc);
+        default: return 0;
+      }
+    });
+  }
+   compare(a: number | string, b: number | string, isAsc: boolean) {
+    return (a < b ? -1 : 1) * (isAsc ? 1 : -1);
+  }
+  get vg(): boolean {
+    const job = this.grid?.job
+    const random = AnalyzerConstants.VGWeapons[0]
+    if (job) {
+      return AnalyzerConstants.Jobs[job].canEquip.indexOf(random) != -1
+    }
+    return false
+
+  }
+
+  isBufforDebbuff(): boolean {
+    return Jobs.Minstrel == this.grid?.job || Jobs.Sorcerer == this.grid?.job
   }
 
 }

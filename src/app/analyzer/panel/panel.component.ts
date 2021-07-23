@@ -33,14 +33,14 @@ export class PanelComponent implements OnInit {
     this.searchForm = this.fb.group(
       {
         name: [''],
-        chkL: [false],
+        chkL: [true],
         chkSR: [false],
         chkS: [false],
         chkA: [false],
         chkFire: [false],
         chkWater: [false],
         chkWind: [false],
-        type: ['All']
+        type: ['Pole']
       }
     )
 
@@ -127,6 +127,9 @@ export class PanelComponent implements OnInit {
         }
         return isValid
       })
+  }
+  selectWeapon(wp:Weapon){
+    this.selectedWp.next(wp)
   }
 
 }

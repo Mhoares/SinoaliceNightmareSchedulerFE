@@ -23,7 +23,9 @@ export class Grid {
     private _stats: Stats,
     private _name: string,
     public id: number,
-    private _job?: Jobs
+    private _job?: Jobs,
+    public isOwner =true
+
   ) {
     this.change$.subscribe(() => {
       this.calculate()
@@ -386,6 +388,21 @@ export interface ElementChartParameters {
   mdef?: boolean,
   matk?: boolean,
   debuff?: boolean,
+}
+export interface RemoteGrid{
+  webContentLink:string
+  isOwner:Boolean
+  alias:string
+  aliasID:number
+  fileID:string
+  currentBody?:StorageGrid[]
+  chkSum?:string
+}
+export interface StoredRemoteGrid{
+  webContentLink:string
+  alias:string
+  aliasID:number
+  fileID:string
 }
 
 
