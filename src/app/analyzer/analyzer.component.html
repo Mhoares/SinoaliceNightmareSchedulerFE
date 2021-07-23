@@ -13,7 +13,7 @@
                        [currentGrid]="grid"></app-grid-analyzer>
   </mat-tab>
 </mat-tab-group>
-<app-panel *ngIf="load" [catalog]="catalog"
+<app-panel  *ngIf="load && tabSelected !=2" [catalog]="catalog"
            [selectedWp]="selectedWp"
            [isInventorySelected]="isInventorySelected"
            [inventory]="inventory"></app-panel>

@@ -1,6 +1,9 @@
 <div class="inventory">
   <mat-card [ngClass]="{'panel':!showAsGrid, 'grid':showAsGrid}">
     <mat-card-header>
+      <mat-card-subtitle class="line" >Add weapons to the inventory or grid by double clicking them in the panel,
+        you can edit your weapons and view their details by double clicking on them, but only if they are in inventory or on the grid,
+                                      don't forget save your first grid</mat-card-subtitle>
       <form class="form" [formGroup]="searchForm">
         <mat-form-field>
           <mat-label>Name</mat-label>
@@ -25,15 +28,29 @@
       </form>
 
     </mat-card-header>
-    <mat-grid-list [cols]="cols">
-      <mat-grid-tile *ngFor="let wp of visibleWps">
-        <div class="slot" matRipple>
-          <img [matTooltip]="wp.toString()"
-               matTooltipClass="line" class="mat-img"
-               (dblclick)="this.displayedWeapon.next(wp)"
-               [src]="wp.getImageURL()"/>
-        </div>
-      </mat-grid-tile>
+    <mat-grid-list matSort  (matSortChange)="sortData($event)" [cols]="cols">
+      <div  *ngIf="grid"  class="mat-card-subtitle"> Sort by:</div>
+      <tr matTooltip="click on the header to sort ascending or descending" matTooltipPosition="above">
+        <th *ngIf=" this.grid && !vg && !isBufforDebbuff()" mat-sort-header="heal" class="mat-body-2">Heal</th>
+        <th  *ngIf="vg" mat-sort-header="damage" class="mat-body-2">Damage</th>
+        <th  *ngIf="isBufforDebbuff()" mat-sort-header="P.ATK" class="mat-body-2 buff-color">P.ATK</th>
+        <th *ngIf="isBufforDebbuff()" mat-sort-header="M.ATK" class="mat-body-2 buff-color">M.ATK</th>
+        <th *ngIf="isBufforDebbuff()" mat-sort-header="M.DEF" class="mat-body-2 buff-color">M.DEF</th>
+        <th *ngIf="isBufforDebbuff()" mat-sort-header="P.DEF" class="mat-body-2 buff-color">P.DEF</th>
+        <th *ngIf="isBufforDebbuff()" mat-sort-header="Debuff P.ATK" class="mat-body-2 debuff-color">P.ATK</th>
+        <th *ngIf="isBufforDebbuff()" mat-sort-header="Debuff M.ATK" class="mat-body-2 debuff-color">M.ATK</th>
+        <th *ngIf="isBufforDebbuff()" mat-sort-header="Debuff M.DEF" class="mat-body-2 debuff-color">M.DEF</th>
+        <th *ngIf="isBufforDebbuff()" mat-sort-header="Debuff P.DEF" class="mat-body-2 debuff-color">P.DEF</th>
+
+      </tr>
+      <tr *ngFor="let wp of visibleWps">
+        <mat-grid-tile >
+          <app-weapon  class="slot" [wp]="wp" (dblclick)="selectDisplayed(wp)">
+
+          </app-weapon>
+        </mat-grid-tile>
+      </tr>
+
     </mat-grid-list>
     <mat-card-content>
 

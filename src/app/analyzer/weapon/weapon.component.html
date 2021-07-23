@@ -1,0 +1,5 @@
+<div *ngIf="wp" class="slot"  matRipple>
+  <img [matTooltip]="wp.toString()"
+       matTooltipClass="line"
+       class="mat-img" [src]="wp.getImageURL()"/>
+</div>

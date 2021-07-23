@@ -9,6 +9,9 @@ import { WeaponDetailsComponent } from './weapon-details/weapon-details.componen
 import { InventoryComponent } from './inventory/inventory.component';
 import { GridAnalyzerComponent } from './grid-analyzer/grid-analyzer.component';
 import { GridDetailsComponent } from './grid-details/grid-details.component';
+import { WeaponComponent } from './weapon/weapon.component';
+import {ChartsModule} from "ng2-charts";
+import { ShareGridComponent } from './share-grid/share-grid.component';
 
 
 @NgModule({
@@ -18,12 +21,15 @@ import { GridDetailsComponent } from './grid-details/grid-details.component';
     WeaponDetailsComponent,
     InventoryComponent,
     GridAnalyzerComponent,
-    GridDetailsComponent
+    GridDetailsComponent,
+    WeaponComponent,
+    ShareGridComponent
   ],
   imports: [
     CommonModule,
     AnalyzerRoutingModule,
-    SharedModule
+    SharedModule,
+    ChartsModule
   ]
 })
 export class AnalyzerModule { }

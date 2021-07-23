@@ -17,6 +17,7 @@ export class AnalyzerComponent implements OnInit {
   isInventorySelected = new BehaviorSubject<boolean>(true)
   wps: Weapon[] =[]
   catalog:Weapon[]=[]
+  tabSelected = 0
   get inventory():Weapon[]{
     return this.service.inventory
   }
@@ -39,7 +40,10 @@ export class AnalyzerComponent implements OnInit {
 
   }
   tabChanged(tabChangeEvent: MatTabChangeEvent): void {
-    this.isInventorySelected.next(tabChangeEvent.index != 1)
+    this.tabSelected = tabChangeEvent.index
+    this.isInventorySelected.next(tabChangeEvent.index == 0)
+
+
   }
 
 

@@ -1,0 +1,40 @@
+<mat-card>
+  <mat-card-content>
+
+    <div class="share" *ngIf="grids.length">
+      <h3 class="mat-h3">Set an Alias to Share your grids</h3>
+      <mat-form-field appearance="outline">
+        <mat-label>Alias</mat-label>
+        <input matInput [disabled]="hasAlias" placeholder="Ex. " [(ngModel)]="alias">
+      </mat-form-field>
+      <mat-form-field appearance="outline" class="share-user">
+        <mat-label>User mail</mat-label>
+        <input matInput placeholder="Ex. " [(ngModel)]="user">
+      </mat-form-field>
+      <button   (click)="shareGrids()" class="share-button" mat-stroked-button>Share</button>
+      <mat-spinner  class="spin" *ngIf="loadingLink"></mat-spinner>
+      <ng-container *ngIf="shareID">
+        <mat-form-field appearance="outline" class="share-link">
+          <mat-label>Share ID:</mat-label>
+          <input [disabled]="true" matInput placeholder="Ex. " [ngModel]="shareID">
+        </mat-form-field>
+        <button mat-stroked-button [cdkCopyToClipboard]="shareID  ">Copy to clipboard</button>
+      </ng-container>
+    </div>
+
+
+  </mat-card-content>
+</mat-card>
+<mat-card>
+  <mat-card-content>
+    <div class="import">
+      <h3 class="mat-h3">Import grids</h3>
+      <mat-form-field appearance="outline" class="share-link">
+        <mat-label>Share ID</mat-label>
+        <input matInput placeholder="Ex. " [(ngModel)]="id">
+      </mat-form-field>
+      <button class="share-button" (click)="importGrids()" mat-stroked-button>Import</button>
+    </div>
+
+  </mat-card-content>
+</mat-card>

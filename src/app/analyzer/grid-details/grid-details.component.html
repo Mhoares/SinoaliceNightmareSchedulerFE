@@ -3,7 +3,7 @@
     <mat-card-header>
 
       <mat-card-title>{{this.grid.name}}</mat-card-title>
-      <mat-card-subtitle> {{this.grid.job}}</mat-card-subtitle>
+      <mat-card-subtitle> {{this.grid.job}} {{this.currentTotalStats}}</mat-card-subtitle>
       <mat-list class="supports">
         <mat-list-item>
           <mat-checkbox class="mat-body" (change)="supportState()" [(ngModel)]=support>Aid Skills</mat-checkbox>
@@ -149,7 +149,7 @@
           </div>
 
         </div>
-        <div *ngIf="isPieChartEnabled && !isRadarChartEnabled" class="chart-wrapper chart">
+        <div *ngIf=" currentTotalStats && isPieChartEnabled && !isRadarChartEnabled" class="chart-wrapper chart">
           <canvas baseChart
                   [data]="pieChartData"
                   [labels]="pieChartLabels"
@@ -160,7 +160,7 @@
                   [colors]="pieChartColors">
           </canvas>
         </div>
-        <div *ngIf="!isPieChartEnabled && isRadarChartEnabled"class="chart-wrapper radar">
+        <div *ngIf=" currentTotalStats && !isPieChartEnabled && isRadarChartEnabled"class="chart-wrapper radar">
           <canvas baseChart
                   [datasets]="radarChartData"
                   [options]="radarChartOptions"

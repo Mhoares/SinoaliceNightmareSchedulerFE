@@ -23,7 +23,8 @@ import {MatSortModule} from '@angular/material/sort';
 import {MatPaginatorModule} from '@angular/material/paginator';
 import {MatSelectModule} from '@angular/material/select';
 import {MatTabsModule} from '@angular/material/tabs';
-import { ChartsModule } from 'ng2-charts';
+import {ClipboardModule} from '@angular/cdk/clipboard';
+import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
 @NgModule({
   declarations: [],
   imports: [
@@ -54,7 +55,8 @@ import { ChartsModule } from 'ng2-charts';
     MatSelectModule,
     FormsModule,
     MatTabsModule,
-    ChartsModule
+    ClipboardModule,
+    MatProgressSpinnerModule
   ]
 })
 export class SharedModule { }

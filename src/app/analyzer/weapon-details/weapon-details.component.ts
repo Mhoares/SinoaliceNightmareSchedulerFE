@@ -4,6 +4,7 @@ import {AnalyzerService} from "../analyzer.service";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {BehaviorSubject} from "rxjs";
 import {Grid} from "../../shared/grid.class";
+import {MatSnackBar} from "@angular/material/snack-bar";
 
 @Component({
   selector: 'app-weapon-details',
@@ -16,7 +17,7 @@ export class WeaponDetailsComponent implements OnInit {
   grid?:Grid
   weapon: Weapon|undefined
   skills:FormGroup
-  constructor(private service:AnalyzerService, private fb:FormBuilder) {
+  constructor(private service:AnalyzerService, private fb:FormBuilder, private _snackBar: MatSnackBar) {
     this.skills = this.fb.group(
       {skill:[1, [Validators.min(1), Validators.max(20)]],
       support: [1, [Validators.min(1), Validators.max(20)]]}
@@ -68,9 +69,12 @@ export class WeaponDetailsComponent implements OnInit {
   destroy(){
     if(  !this.grid && this.weapon ){
       this.service.removeFromGrids(this.weapon)
-      this.service.removeFromInventory(this.weapon)
+      if(this.service.removeFromInventory(this.weapon))
+        this._snackBar.open(`${this.weapon.name} has been removed from inventory`, "close", {duration: 5000})
+
       this.displayed.next(undefined)
     } else if (this.grid && this.weapon && this.grid.remove(this.weapon)){
+      this._snackBar.open(`${this.weapon.name} has been removed from this grid`, "close", {duration: 5000})
       this.displayed.next(undefined)
       this.grid.change.next()
     }
