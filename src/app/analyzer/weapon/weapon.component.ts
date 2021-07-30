@@ -8,6 +8,7 @@ import {Weapon} from "../../shared/weapon.class";
 })
 export class WeaponComponent implements OnInit {
   @Input()wp?:Weapon
+  @Input()isChosen = false
   constructor() { }
 
   ngOnInit(): void {

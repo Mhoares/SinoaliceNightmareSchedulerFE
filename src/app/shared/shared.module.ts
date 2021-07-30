@@ -57,6 +57,7 @@ import {MatProgressSpinnerModule} from '@angular/material/progress-spinner';
     MatTabsModule,
     ClipboardModule,
     MatProgressSpinnerModule
+
   ]
 })
 export class SharedModule { }

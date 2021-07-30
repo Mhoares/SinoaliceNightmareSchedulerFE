@@ -7,9 +7,12 @@
       <mat-list class="supports">
         <mat-list-item>
           <mat-checkbox class="mat-body" (change)="supportState()" [(ngModel)]=support>Aid Skills</mat-checkbox>
-        </mat-list-item >
+          <mat-icon inline matTooltip="Only SB/RS/DC are directly added to the total" matTooltipPosition="right">
+            help
+          </mat-icon>
+        </mat-list-item>
         <mat-list-item *ngIf="isBufforDebbuff()">
-          <mat-checkbox class="mat-body" (change)="supportState()" [(ngModel)]="showBurst">Show Burst</mat-checkbox>
+          <mat-checkbox class="mat-body" [(ngModel)]="showBurst">Show Burst</mat-checkbox>
         </mat-list-item>
       </mat-list>
       <mat-form-field appearance="outline" class="select">
@@ -48,6 +51,13 @@
             <div class="space">
               <div *ngIf="skillResult.patk && isBufforDebbuff() && !showBurst" class="mat-body-2">
                 P.ATK: {{applyRounds(skillResult.patk)| number: '1.0-0'}}
+                <ng-container *ngIf="assistanceSkill.patk && support">
+                  + {{applyRounds(assistanceSkill.patk) | number: '1.0-0'}}
+                  <mat-icon matTooltipClass="line" inline matTooltip="Assistance skill value
+                  (Skills like weapon repair or destroy)" matTooltipPosition="right">
+                    help
+                  </mat-icon>
+                </ng-container>
               </div>
               <div *ngIf=" showBurst && isBufforDebbuff() " class="mat-body-2">
                 P.ATK: {{getTotalBurst().patk | number: '1.0-0'}}
@@ -55,6 +65,13 @@
 
               <div *ngIf="skillResult.matk && isBufforDebbuff() && !showBurst" class="mat-body-2">
                 M.ATK: {{applyRounds(skillResult.matk)| number: '1.0-0'}}
+                <ng-container *ngIf="assistanceSkill.matk && support">
+                  + {{applyRounds(assistanceSkill.matk) | number: '1.0-0'}}
+                  <mat-icon matTooltipClass="line" inline matTooltip="Assistance skill value
+                  (Skills like weapon repair or destroy)" matTooltipPosition="right">
+                    help
+                  </mat-icon>
+                </ng-container>
               </div>
               <div *ngIf=" showBurst && isBufforDebbuff() " class="mat-body-2">
                 M.ATK: {{getTotalBurst().matk | number: '1.0-0'}}
@@ -64,6 +81,13 @@
             <div>
               <div *ngIf="skillResult.pdef && isBufforDebbuff() && !showBurst" class="mat-body-2">
                 P.DEF: {{applyRounds(skillResult.pdef)  | number: '1.0-0'}}
+                <ng-container *ngIf="assistanceSkill.pdef && support">
+                  + {{applyRounds(assistanceSkill.pdef) | number: '1.0-0'}}
+                  <mat-icon matTooltipClass="line" inline matTooltip="Assistance skill value
+                  (Skills like weapon repair or destroy)" matTooltipPosition="right">
+                    help
+                  </mat-icon>
+                </ng-container>
               </div>
               <div *ngIf=" showBurst && isBufforDebbuff() " class="mat-body-2">
                 P.DEF: {{getTotalBurst().pdef | number: '1.0-0'}}
@@ -72,12 +96,26 @@
 
               <div *ngIf="skillResult.mdef && isBufforDebbuff() && !showBurst" class="mat-body-2">
                 M.DEF: {{applyRounds(skillResult.mdef)| number: '1.0-0' }}
+                <ng-container *ngIf="assistanceSkill.mdef && support">
+                  + {{applyRounds(assistanceSkill.mdef) | number: '1.0-0'}}
+                  <mat-icon matTooltipClass="line" inline matTooltip="Assistance skill value
+                  (Skills like weapon repair or destroy)" matTooltipPosition="right">
+                    help
+                  </mat-icon>
+                </ng-container>
               </div>
               <div *ngIf=" showBurst && isBufforDebbuff() " class="mat-body-2">
                 M.DEF: {{getTotalBurst().mdef | number: '1.0-0'}}
               </div>
-              <div  *ngIf=" !showBurst" class="mat-body-2">
+              <div *ngIf=" !showBurst" class="mat-body-2">
                 Total: {{applyRounds(buffTotal) | number: '1.0-0'}}
+                <ng-container *ngIf="assistanceSkill && support">
+                  + {{applyRounds(assistanceBuff) | number: '1.0-0'}}
+                  <mat-icon matTooltipClass="line" inline matTooltip="Assistance skill value
+                  (Skills like weapon repair or destroy)" matTooltipPosition="right">
+                    help
+                  </mat-icon>
+                </ng-container>
               </div>
               <div *ngIf=" showBurst" class="mat-body-2">
                 Total: {{totalBurstBuff | number: '1.0-0'}}
@@ -90,6 +128,13 @@
 
               <div *ngIf="skillResult.debuff && isBufforDebbuff() && !showBurst" class="mat-body-2 ">
                 P.ATK: {{applyRounds(skillResult.debuff.patk)  | number: '1.0-0'}}
+                <ng-container *ngIf="assistanceSkill.debuff && assistanceSkill.debuff.patk && support">
+                  + {{applyRounds(assistanceSkill.debuff.patk) | number: '1.0-0'}}
+                  <mat-icon matTooltipClass="line" inline matTooltip="Assistance skill value
+                  (Skills like weapon repair or destroy)" matTooltipPosition="right">
+                    help
+                  </mat-icon>
+                </ng-container>
               </div>
               <div *ngIf=" showBurst && isBufforDebbuff() && getTotalBurst().debuff" class="mat-body-2">
                 P.ATK: {{getTotalBurst().debuff?.patk | number: '1.0-0'}}
@@ -97,6 +142,13 @@
 
               <div *ngIf="skillResult.debuff && isBufforDebbuff() && !showBurst" class="mat-body-2">
                 M.ATK: {{applyRounds(skillResult.debuff.matk) | number: '1.0-0'}}
+                <ng-container *ngIf="assistanceSkill.debuff && assistanceSkill.debuff.matk && support">
+                  + {{applyRounds(assistanceSkill.debuff.matk) | number: '1.0-0'}}
+                  <mat-icon matTooltipClass="line" inline matTooltip="Assistance skill value
+                  (Skills like weapon repair or destroy)" matTooltipPosition="right">
+                    help
+                  </mat-icon>
+                </ng-container>
               </div>
               <div *ngIf=" showBurst && isBufforDebbuff() && getTotalBurst().debuff" class="mat-body-2">
                 M.ATK: {{getTotalBurst().debuff?.matk | number: '1.0-0'}}
@@ -106,18 +158,39 @@
 
               <div *ngIf="skillResult.debuff && isBufforDebbuff() && !showBurst" class="mat-body-2">
                 P.DEF: {{applyRounds(skillResult.debuff.pdef) | number: '1.0-0'}}
+                <ng-container *ngIf="assistanceSkill.debuff && assistanceSkill.debuff.pdef && support">
+                  + {{applyRounds(assistanceSkill.debuff.pdef) | number: '1.0-0'}}
+                  <mat-icon matTooltipClass="line" inline matTooltip="Assistance skill value
+                  (Skills like weapon repair or destroy)" matTooltipPosition="right">
+                    help
+                  </mat-icon>
+                </ng-container>
               </div>
               <div *ngIf=" showBurst && isBufforDebbuff() && getTotalBurst().debuff" class="mat-body-2">
                 P.DEF: {{getTotalBurst().debuff?.pdef | number: '1.0-0'}}
               </div>
               <div *ngIf="skillResult.debuff && isBufforDebbuff()&& !showBurst" class="mat-body-2">
                 M.DEF: {{applyRounds(skillResult.debuff.mdef) | number: '1.0-0'}}
+                <ng-container *ngIf="assistanceSkill.debuff && assistanceSkill.debuff.mdef && support">
+                  + {{applyRounds(assistanceSkill.debuff.mdef) | number: '1.0-0'}}
+                  <mat-icon matTooltipClass="line" inline matTooltip="Assistance skill value
+                  (Skills like weapon repair or destroy)" matTooltipPosition="right">
+                    help
+                  </mat-icon>
+                </ng-container>
               </div>
               <div *ngIf=" showBurst && isBufforDebbuff() && getTotalBurst().debuff" class="mat-body-2">
                 M.DEF: {{getTotalBurst().debuff?.mdef | number: '1.0-0'}}
               </div>
               <div *ngIf=" !showBurst" class="mat-body-2">
-               Total: {{applyRounds(debuffTotal) | number: '1.0-0'}}
+                Total: {{applyRounds(debuffTotal) | number: '1.0-0'}}
+                <ng-container *ngIf="assistanceSkill.debuff && support">
+                  + {{applyRounds(assistanceDeBuff)| number: '1.0-0'}}
+                  <mat-icon matTooltipClass="line" inline matTooltip="Assistance skill value
+                  (Skills like weapon repair or destroy)" matTooltipPosition="right">
+                    help
+                  </mat-icon>
+                </ng-container>
               </div>
               <div *ngIf=" showBurst" class="mat-body-2">
                 Total: {{totalBurstDeBuff | number: '1.0-0'}}
@@ -130,15 +203,14 @@
             <h4>Aid Skills</h4>
             <ng-container *ngFor=" let aid of aids">
 
-                <div class="mat-body-2">
-                  {{aid.name}}({{aid.tier}}): {{aid.quantity}}
-                </div>
+              <div class="mat-body-2">
+                {{aid.name}}({{aid.tier}}): {{aid.quantity}}
+              </div>
 
 
-
-                <div class="mat-body-2">
+              <div class="mat-body-2">
                 Boost: {{aid.boost | number: '1.1-1'}}%
-                </div>
+              </div>
 
 
             </ng-container>
@@ -160,7 +232,7 @@
                   [colors]="pieChartColors">
           </canvas>
         </div>
-        <div *ngIf=" currentTotalStats && !isPieChartEnabled && isRadarChartEnabled"class="chart-wrapper radar">
+        <div *ngIf=" currentTotalStats && !isPieChartEnabled && isRadarChartEnabled" class="chart-wrapper radar">
           <canvas baseChart
                   [datasets]="radarChartData"
                   [options]="radarChartOptions"
@@ -183,7 +255,8 @@
       </mat-form-field>
       <mat-form-field appearance="outline" class="charts">
         <mat-label> Chart: {{selectedChart}}</mat-label>
-        <mat-select [(ngModel)]="selectedChart" (selectionChange)="selectChart($event.value)" [disabled]="!chartNames.length">
+        <mat-select [(ngModel)]="selectedChart" (selectionChange)="selectChart($event.value)"
+                    [disabled]="!chartNames.length">
           <mat-option *ngFor="let chart of chartNames" [value]="chart">
             {{chart || "All"}}
           </mat-option>

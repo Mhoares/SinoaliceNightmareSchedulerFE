@@ -1,5 +1,8 @@
 <div *ngIf="wp" class="slot"  matRipple>
   <img [matTooltip]="wp.toString()"
        matTooltipClass="line"
+       [ngClass]="{'chosen':isChosen}"
        class="mat-img" [src]="wp.getImageURL()"/>
+  <span *ngIf="wp.lb" > {{wp.lb}}</span>
+
 </div>

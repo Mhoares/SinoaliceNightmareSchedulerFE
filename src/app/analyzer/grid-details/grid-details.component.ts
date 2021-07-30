@@ -77,11 +77,12 @@ export class GridDetailsComponent implements OnInit {
 
 
   }
-  get currentTotalStats(): number{
+
+  get currentTotalStats(): number {
     return this.currentGrid.value.stats.patk
-    + this.currentGrid.value.stats.matk
-    + this.currentGrid.value.stats.mdef
-    + this.currentGrid.value.stats.pdef
+      + this.currentGrid.value.stats.matk
+      + this.currentGrid.value.stats.mdef
+      + this.currentGrid.value.stats.pdef
   }
 
   ngOnInit(): void {
@@ -103,12 +104,16 @@ export class GridDetailsComponent implements OnInit {
         this.setCharts()
         this.setBursts()
 
+
       })
-      console.log(this.currentBurst)
 
     })
 
 
+  }
+
+  get assistanceSkill(): SkillResult {
+    return this.currentGrid.value.calculateAssistanceSkills()
   }
 
   setBursts() {
@@ -129,7 +134,7 @@ export class GridDetailsComponent implements OnInit {
 
   chartsByJob(): string[] {
     if (this.grid && this.grid.job == Jobs.Cleric && !this.selectedElement) {
-      return ["overall burst",'weapons by element', 'recover by elements']
+      return ["overall burst", 'weapons by element', 'recover by elements']
     }
     if (this.isBufforDebbuff() && !this.selectedElement) {
       return ['overall',
@@ -147,7 +152,7 @@ export class GridDetailsComponent implements OnInit {
       return ['overall']
     }
     if (this.vg && !this.selectedElement) {
-      return ["overall burst",'damage by elements', 'weapons by element']
+      return ["overall burst", 'damage by elements', 'weapons by element']
     }
     return []
   }
@@ -584,39 +589,39 @@ export class GridDetailsComponent implements OnInit {
       burst.forEach((value, key) => {
         if (value && key) {
 
-            this.radarChartData.push(
-              {
-                label: this.elementNames[key],
-                data: [value.matk,
-                  value.patk,
-                  value.mdef,
-                  value.pdef,
-                  value.debuff?.patk,
-                  value.debuff?.matk,
-                  value.debuff?.mdef,
-                  value.debuff?.pdef],
-                fill: true,
-                backgroundColor: this.elementColor(key, 20, 100, true),
-                borderColor: this.elementColor(key, 20, 100),
-                pointBackgroundColor: this.elementColor(key, 20, 100),
-                pointBorderColor: '#fff',
-                pointHoverBackgroundColor: '#fff',
-                pointHoverBorderColor: this.elementColor(key, 20, 100)
-              },
-            )
+          this.radarChartData.push(
+            {
+              label: this.elementNames[key],
+              data: [value.matk,
+                value.patk,
+                value.mdef,
+                value.pdef,
+                value.debuff?.patk,
+                value.debuff?.matk,
+                value.debuff?.mdef,
+                value.debuff?.pdef],
+              fill: true,
+              backgroundColor: this.elementColor(key, 20, 100, true),
+              borderColor: this.elementColor(key, 20, 100),
+              pointBackgroundColor: this.elementColor(key, 20, 100),
+              pointBorderColor: '#fff',
+              pointHoverBackgroundColor: '#fff',
+              pointHoverBorderColor: this.elementColor(key, 20, 100)
+            },
+          )
 
 
         }
       })
-    }else if(burst){
+    } else if (burst) {
       this.radarChartData.push(
         {
-          label:this.overallBurstLabel(),
+          label: this.overallBurstLabel(),
           data: this.overallBurstData(burst),
           fill: true,
           backgroundColor: "rgba(194,24,91,0.2)",
           borderColor: "rgb(194,24,91)",
-          pointBackgroundColor:"rgb(194,24,91)" ,
+          pointBackgroundColor: "rgb(194,24,91)",
           pointBorderColor: '#fff',
           pointHoverBackgroundColor: '#fff',
           pointHoverBorderColor: "rgb(194,24,91)"
@@ -631,23 +636,38 @@ export class GridDetailsComponent implements OnInit {
 
 
   }
-  overallBurstLabel():string{
+
+  overallBurstLabel(): string {
     let label = "Heal"
     if (this.vg)
       label = "Damage"
     return label
   }
-  overallBurstData(burst: Map<number, SkillResult|undefined>): (undefined|number)[]{
+
+  overallBurstData(burst: Map<number, SkillResult | undefined>): (undefined | number)[] {
     let fire = burst.get(Attribute.Fire)?.damage
     let water = burst.get(Attribute.Water)?.damage
     let wind = burst.get(Attribute.Wind)?.damage
-    if(!this.vg){
-       fire = burst.get(Attribute.Fire)?.recover
-       water = burst.get(Attribute.Water)?.recover
-       wind = burst.get(Attribute.Wind)?.recover
+    if (!this.vg) {
+      fire = burst.get(Attribute.Fire)?.recover
+      water = burst.get(Attribute.Water)?.recover
+      wind = burst.get(Attribute.Wind)?.recover
     }
-    return [fire,water, wind]
+    return [fire, water, wind]
 
+  }
+
+  get assistanceBuff(): number {
+    return this.assistanceSkill.patk
+      + this.assistanceSkill.matk
+      + this.assistanceSkill.mdef
+      + this.assistanceSkill.pdef
+  }
+  get assistanceDeBuff(): number {
+    return (this.assistanceSkill.debuff?.patk || 0)
+      + (this.assistanceSkill.debuff?.matk || 0)
+      + (this.assistanceSkill.debuff?.mdef || 0)
+      + (this.assistanceSkill.debuff?.pdef || 0)
   }
 
 

@@ -4,5 +4,5 @@ export interface SupportSkillDefinition{
 }
 export interface SupportSkillDescription{
   rate:number
-  value:Record<string, number>[]
+  value:Record<string, number>
 }

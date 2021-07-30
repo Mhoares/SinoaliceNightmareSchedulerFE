@@ -1,4 +1,4 @@
-import {Weapons} from "./analyzer.constants";
+import {AidSkill, Weapons} from "./analyzer.constants";
 
 export interface WeaponRaw {
   id: number;
@@ -10,7 +10,7 @@ export interface WeaponRaw {
   targets: number;
   skill_name: string;
   sp: number;
-  support_skill_name: string;
+  support_skill_name: AidSkill;
   support_skill_tier: string;
   damage: number;
   recover: number;

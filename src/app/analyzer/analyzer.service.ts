@@ -2,10 +2,10 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {BehaviorSubject, Observable, Subject, Subscription} from "rxjs";
 import {environment} from "../../environments/environment";
-import {Jobs} from "../shared/analyzer.constants";
+import {AidSkill, AnalyzerConstants, Jobs} from "../shared/analyzer.constants";
 import {WeaponRaw} from "../shared/weapon_raw.model";
 import {Skill, SupportSkill, Weapon} from "../shared/weapon.class";
-import {SupportSkillDefinition} from "../shared/support_skill_definition.model";
+import {SupportSkillDefinition, SupportSkillDescription} from "../shared/support_skill_definition.model";
 import {Grid, StorageGrid} from "../shared/grid.class";
 
 @Injectable({
@@ -27,8 +27,12 @@ export class AnalyzerService {
   inventoryChanged = new Subject<void>()
 
   constructor(private http: HttpClient) {
-    this.readInventory()
-    this.readGrids()
+      this.getBoostDefinitions().then(()=>{
+        this.readInventory()
+        this.readGrids()
+        this.inventoryChanged.next()
+      })
+
     this.inventoryChanged.asObservable().subscribe(() => this.writeInventory())
 
     this.grid.asObservable().subscribe(value => {
@@ -41,6 +45,10 @@ export class AnalyzerService {
 
     })
   }
+
+
+
+
 
   writeInventory() {
     const storage = JSON.stringify(this.inventory)
@@ -57,6 +65,7 @@ export class AnalyzerService {
 
         tmp.push(this.copyWeapon(w)
         )
+        tmp[tmp.length - 1] = this.setSupportSkillLvl(tmp[tmp.length - 1], tmp[tmp.length - 1].support.level)
       })
     this.inventory = tmp
   }
@@ -142,7 +151,7 @@ export class AnalyzerService {
           if (found)
             weapons.push(found)
         })
-        tmp = new Grid(g._stats, g._name, g.id, g._job,true)
+        tmp = new Grid(g._stats, g._name, g.id, g._job, true)
         tmp._weapons = weapons
         this.grids.push(tmp)
 
@@ -223,10 +232,39 @@ export class AnalyzerService {
 
   async getBoostDefinitions() {
     let tmp = new Map<string, SupportSkillDefinition>()
-    await this.getSupportSkillDefinition('Support Boon').toPromise().then(s => tmp.set(s.support_skill_name, s))
-    await this.getSupportSkillDefinition('Recovery Support').toPromise().then(s => tmp.set(s.support_skill_name, s))
-    await this.getSupportSkillDefinition('Dauntless Courage').toPromise().then(s => tmp.set(s.support_skill_name, s))
+
+
+    for (const aid of AnalyzerConstants.AidSKills) {
+      await this.getSupportSkillDefinition(aid).toPromise().then(s => tmp.set(s.support_skill_name, s))
+    }
+    this.patchSkill(AidSkill.BladeDeployment, tmp, {'P.Atk': 0.24}, 'I')
+    this.patchSkill(AidSkill.DestroyWeapon, tmp, {'P.Atk': 0.24 ,'M.Atk': 0.24}, 'I')
+
     this.boostDefinitions.next(tmp)
+  }
+
+  patchSkill(aid: AidSkill, tmp: Map<string, SupportSkillDefinition>, value: Record<string, number>, tier: string) {
+    let buggedSkill: SupportSkillDefinition | undefined
+    let description: SupportSkillDescription[] = []
+    buggedSkill = tmp.get(aid)
+    if (buggedSkill) {
+      for (let i = 0; i < 20; i++) {
+        description.push({rate: this.calculateProcRate(i), value: value})
+      }
+      buggedSkill.support_skill_tier[tier] = description
+
+    }
+  }
+
+  calculateProcRate(SLv: number): number {
+    let bonus = 0
+    if (SLv >= 15) {
+      bonus += 0.5
+    }
+    if (SLv == 20) {
+      bonus += 0.5
+    }
+    return 4.0 + ((SLv - 1) * 0.5) + bonus
   }
 
   async getWeapons(): Promise<Weapon[]> {

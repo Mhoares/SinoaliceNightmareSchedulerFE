@@ -15,6 +15,38 @@ export class AnalyzerConstants {
     return [Weapons.Staff, Weapons.Harp, Weapons.Book, Weapons.Orb]
   }
 
+  static get AidSKills() {
+    return [AidSkill.ArmorRepair
+      , AidSkill.BarrierDeployment
+      , AidSkill.BladeDeployment
+      , AidSkill.DauntlessCourage
+      , AidSkill.ReplenishMagic
+      , AidSkill.SupportBoon
+      , AidSkill.RecoverySupport
+      , AidSkill.DestroyArmor
+      , AidSkill.DestroyWeapon
+      , AidSkill.IronShieldDeployment
+      , AidSkill.WeaponRepair
+      , AidSkill.DeploySquareFormation
+    ]
+  }
+  static get AssistanceSKills() {
+    return [AidSkill.ArmorRepair
+      , AidSkill.BarrierDeployment
+      , AidSkill.BladeDeployment
+      , AidSkill.DestroyArmor
+      , AidSkill.DestroyWeapon
+      , AidSkill.IronShieldDeployment
+      , AidSkill.WeaponRepair
+      , AidSkill.DeploySquareFormation
+    ]
+  }
+  static get AssistanceDebuffSKills() {
+    return [AidSkill.DestroyArmor
+      , AidSkill.DestroyWeapon
+    ]
+  }
+
   static get voidSKillResult() {
     return {
       damage: 0,
@@ -135,6 +167,21 @@ export enum Weapons {
   Staff = 'Staff',
   Harp = 'Harp',
   Pole = 'Pole'
+}
+
+export enum AidSkill {
+  ReplenishMagic = "Replenish Magic",
+  DauntlessCourage = 'Dauntless Courage',
+  RecoverySupport = 'Recovery Support',
+  SupportBoon = 'Support Boon',
+  BladeDeployment = 'Blade Deployment',
+  BarrierDeployment = 'Barrier Deployment',
+  IronShieldDeployment = 'Iron Shield Deployment',
+  ArmorRepair = 'Armor Repair',
+  DestroyArmor = 'Destroy Armor',
+  DestroyWeapon = 'Destroy Weapon',
+  WeaponRepair = 'Weapon Repair',
+  DeploySquareFormation = 'Deploy Square Formation'
 }
 
 export enum Jobs {

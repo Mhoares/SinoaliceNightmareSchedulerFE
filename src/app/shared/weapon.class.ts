@@ -1,4 +1,4 @@
-import {AnalyzerConstants, Jobs, Weapons} from "./analyzer.constants";
+import {AidSkill, AnalyzerConstants, Jobs, Weapons} from "./analyzer.constants";
 
 export class Weapon {
 
@@ -287,10 +287,10 @@ export class Skill {
 export class SupportSkill {
 
   constructor(public level: number,
-              public name: string,
+              public name: AidSkill,
               public tier: string,
               public rate: number,
-              public value?: Record<string, number>[]) {
+              public value?: Record<string, number>) {
   }
 
   public clone(): SupportSkill {

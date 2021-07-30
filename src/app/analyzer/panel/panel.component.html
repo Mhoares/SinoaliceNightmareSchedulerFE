@@ -27,7 +27,9 @@
   </mat-card-header>
   <mat-grid-list cols="10">
     <mat-grid-tile *ngFor="let wp of visibleWps" >
-        <app-weapon  class="slot" [wp]="wp" (dblclick)="selectWeapon(wp)">
+        <app-weapon  class="slot" [wp]="wp"
+                     (dblclick)="selectWeapon(wp)"
+        [isChosen]="isChosen(wp)">
 
         </app-weapon>
     </mat-grid-tile>

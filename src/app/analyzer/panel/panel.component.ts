@@ -4,6 +4,7 @@ import {FormBuilder, FormGroup} from "@angular/forms";
 import {Weapon} from "../../shared/weapon.class";
 import {Attribute, Rarity} from "../../shared/nightmare.model";
 import {Weapons} from "../../shared/analyzer.constants";
+import {AnalyzerService} from "../analyzer.service";
 
 @Component({
   selector: 'app-panel',
@@ -29,7 +30,7 @@ export class PanelComponent implements OnInit {
     Weapons.Sword,
     Weapons.Hammer]
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private service:AnalyzerService) {
     this.searchForm = this.fb.group(
       {
         name: [''],
@@ -66,9 +67,17 @@ export class PanelComponent implements OnInit {
     })
   }
 
+
   reset() {
     this.visibleWps = []
     this.wps.forEach(w => this.visibleWps.push(w))
+  }
+  isChosen( weapon :Weapon):boolean{
+    if(this.isInventorySelected.value){
+      return this.inventory.find(wp => weapon.id == wp.id)!= undefined
+    }else{
+      return this.service.grid.value._weapons.find(wp => wp.id == weapon.id) !=undefined
+    }
   }
 
   filter() {

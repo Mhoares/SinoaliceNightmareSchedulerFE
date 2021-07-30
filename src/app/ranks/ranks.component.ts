@@ -38,7 +38,7 @@ export class RanksComponent implements OnInit,AfterViewInit {
   }
 
   ngOnInit(): void {
-    this.service.getRanks(6,10).subscribe( n =>  {
+    this.service.getRanks(6,12).subscribe( n =>  {
       this.dataSource =new MatTableDataSource(n.rank)
       this.dataSource.filterPredicate = (data:Rank, filter: string) => {
         const matchFilter:Boolean[] = [true];
